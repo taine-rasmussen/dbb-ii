@@ -94,7 +94,7 @@ export default class Arena extends Phaser.Scene {
 
     update() {
 
-        // Loop through player object
+        // Loop through player inputs
         for (let thisPlayer of this.mergedInput.players) {
 
             const PLAYER_SPEED = 10;
