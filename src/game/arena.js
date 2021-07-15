@@ -1,17 +1,20 @@
 import MergedInput from "../main";
-
+import Fighter from './Fighter'
 export default class Arena extends Phaser.Scene {
 
 
     preload() {
         this.load.scenePlugin('mergedInput', MergedInput);
 		this.load.multiatlas('gamepad', 'assets/gamepad.json', 'assets');
+        this.load.image('man', 'assets/man.png')
     }
 
     create() {
         // Set up player objects
         this.players = Array.from(new Array(this.numberOfPlayers)).map((_, i) => this.mergedInput.addPlayer(i))
         console.dir(this.players)
+        this.add.existing(new Fighter(this, 100, 100))
+        this.add.existing(new Fighter(this, 400, 400))
 
         // Define keys (player, action, key, append)
 		this.mergedInput
