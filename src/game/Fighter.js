@@ -5,7 +5,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     this.setTexture('man')
     this.setPosition(x, y)
   }
-  update() {
-
+  update(input, time, delta) {
+    
   }
 }
