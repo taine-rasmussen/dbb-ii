@@ -39,6 +39,7 @@ export default class Arena extends Phaser.Scene {
         
         middleLayer.setCollisionByProperty({ collides: true });
         this.physics.add.collider(middleLayer, crab);
+        
         middleLayer.setCollisionByExclusion([-1]);
         
 
@@ -50,8 +51,10 @@ export default class Arena extends Phaser.Scene {
         this.players.forEach((player, i) => {
             player.fighter = new Fighter(this, 400, 400);
             this.add.existing(player.fighter);
-            this.physics.add.existing(player.fighter, false)
-        });
+            this.physics.add.existing(player.fighter, false);
+            this.physics.add.collider(middleLayer, player.fighter);
+            });
+
 
 
         // Define keys (player, action, key, append)
