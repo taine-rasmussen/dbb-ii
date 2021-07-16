@@ -1,52 +1,60 @@
+import Dash from "./stances/Dash"
+import Block from "./stances/Block"
+import Ball from "./stances/Ball"
+
 const LUBRICATION = 50;
 
+const ControlScheme = Object.freeze({
+  // Flappy-bird-esque jumping
+  ACTION_FLAP: "B0",
+  STANCE_DASH: "B5",
+  STANCE_BLOCK: "B4",
+  STANCE_BALL: "B2",
+})
 
-// const states = Object.freeze({
-//   DASH: "DASH",
-//   BLOCK: "BLOCK",
-//   BALL: "BALL"
-// });
+const Stances = Object.freeze({
+  DASH: "DASH",
+  BLOCK: "BLOCK",
+  BALL: "BALL"
+});
 
 // const States = 
 
 export default class Fighter extends Phaser.GameObjects.Sprite {
-  constructor(arena, x, y) {
+  constructor(arena, x, y, controlScheme = ControlScheme) {
     super(arena, x, y)
-    this.setTexture('man')
+    this.sprite = "player"
+    this.setScale(0.1);
+    this.setTexture(this.sprite)
     this.setPosition(x, y)
+    this.controlScheme = controlScheme
   }
 
-  update({direction, buttons}) {
+  update(input) {
 
+    let {direction, buttons} = input;
     let { UP, DOWN, LEFT, RIGHT } = direction;
-    let ax = RIGHT - LEFT;
-    let ay = DOWN - UP;
-    this.body.acceleration.x = ax * LUBRICATION;
-    this.body.acceleration.y = ay * LUBRICATION;
+    let accelerationX = RIGHT - LEFT;
+    let accelerationY = DOWN - UP;
+    this.body.acceleration.x = accelerationX * LUBRICATION;
+    this.body.acceleration.y = accelerationY * LUBRICATION;
 
-  //   // if the player presses A:
-  //   if (buttons["B0"]) {
-  //     this._nextState();
-  //   }
+    // if the player presses A:
+    if (buttons[this.controlScheme.ACTION_FLAP]) {
+     console.log(`P${input.index+1} is flapping: Flap! Flap!`);
+    }
 
-  // // _underscore denotes private methods, not called by Scene
-  // function _nextState() {
-  //   this.stateIndex = (this.stateIndex + 1) % states.length;
-  //   this.state = states[this.stateIndex]
-  // }
+    if  (buttons[this.controlScheme.STANCE_BALL]) {
+      Ball.bind(this)();
+    }
 
-  //   if (direction.UP > 0) {
-  //     this.body.setVelocityX();
-  // }
-  // if (direction.RIGHT > 0) {
-  //     this.x += PLAYER_SPEED;
-  // }
-  // if (direction.DOWN > 0) {
-  //     this.y += PLAYER_SPEED;
-  // }
-  // if (direction.LEFT > 0) {
-  //     this.x -= PLAYER_SPEED;
-  // }
-  // }
+    if (buttons[this.controlScheme.STANCE_BLOCK]) {
+      Block.bind(this)();
+    }
+
+    if (buttons[this.controlScheme.STANCE_DASH]) {
+      Dash.bind(this)();
+    }
   }
 }
+

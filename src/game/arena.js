@@ -6,7 +6,10 @@ export default class Arena extends Phaser.Scene {
     preload() {
         this.load.scenePlugin('mergedInput', MergedInput);
 		this.load.multiatlas('gamepad', 'assets/gamepad.json', 'assets');
-        this.load.image('man', 'assets/man.png')
+        this.load.image('player', 'assets/Player.png')
+        this.load.image('dash', 'assets/Dash.png')
+        this.load.image('block', 'assets/Block.png')
+        this.load.image('ball', 'assets/Ball.png')
     }
 
     create() {
@@ -116,10 +119,6 @@ export default class Arena extends Phaser.Scene {
             //     fighter.x -= PLAYER_SPEED;
             // }
 
-            for (let thisButton in thisPlayer.buttons) {
-                // do player actions
-                // (shape cycling etc.)
-            }
         }
 
         this.playerTexts.forEach((text, i) => {
@@ -130,6 +129,8 @@ export default class Arena extends Phaser.Scene {
                 'Interaction: ' + JSON.stringify(this.mergedInput.getPlayer(i).interaction)
             ])
         })
+
+        this.physics.world.wrap
 
         // this.player2Text.setText(JSON.stringify(this.mergedInput.debug().players, null, "\t"));
 
