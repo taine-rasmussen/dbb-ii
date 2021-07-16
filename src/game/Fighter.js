@@ -55,6 +55,20 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     if (buttons[this.controlScheme.STANCE_DASH]) {
       Dash.bind(this)();
     }
+
+    if (this.y > 720) {
+      this.y = -32
+    }
+    if (this.y < -32) {
+      this.y = 730
+    }
+
+    if (this.x < 0) {
+      this.x = 1279
+    }
+    if (this.x > 1284) {
+      this.x = 1
+    }
   }
 }
 
