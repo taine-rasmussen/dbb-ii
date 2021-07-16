@@ -6,9 +6,41 @@ export default class Arena extends Phaser.Scene {
     preload() {
         this.load.scenePlugin('mergedInput', MergedInput);
 		this.load.multiatlas('gamepad', 'assets/gamepad.json', 'assets');
+
+        //Setup for loading the base tilemap and required tile images
+        this.load.image('base_tiles', 'assets/triangle.png')
+        this.load.tilemapTiledJSON('tilemap', 'assets/tiler-initial-prac.json')
+
+        this.load.image('crab', 'assets/crab.png')
     }
 
     create() {
+
+        //Setup for loading the base tilemap and required tile images
+        const map = this.make.tilemap({ key: 'tilemap' })
+        const tileset = map.addTilesetImage('Triangle', 'base_tiles')
+        // create the layers we want in the right order
+	    const backgroundLayer = map.createLayer('Tile Layer 1', tileset, 0, 0)
+        const middleLayer = map.createDynamicLayer('Tile Layer 2', tileset, 0, 0)
+        backgroundLayer.setScale(0.8)
+        middleLayer.setScale(0.8)
+
+        
+        this.physics.world.setBounds(0, 0, 1280, 720)
+        
+        // create the player sprite    
+        var crab = this.physics.add.sprite(200, 200, 'crab'); 
+        crab.setBounce(0.5); // our crab will bounce from items
+        crab.setCollideWorldBounds(true); // do
+        crab.setScale(0.3)
+        
+        crab.body.setSize(crab.width, crab.height-8);
+        
+        middleLayer.setCollisionByProperty({ collides: true });
+        this.physics.add.collider(middleLayer, crab);
+        middleLayer.setCollisionByExclusion([-1]);
+        
+
         // Set up player objects
         this.players = Array.from(new Array(this.numberOfPlayers)).map((_, i) => this.mergedInput.addPlayer(i))
         console.dir(this.players)
