@@ -18,7 +18,9 @@ export default class Arena extends Phaser.Scene {
         this.players.forEach((player, i) => {
             player.fighter = new Fighter(this, 400, 400);
             this.add.existing(player.fighter);
+            this.physics.add.existing(player.fighter, false)
         });
+
 
         // Define keys (player, action, key, append)
 		this.mergedInput
@@ -97,22 +99,22 @@ export default class Arena extends Phaser.Scene {
         // Loop through player inputs
         for (let thisPlayer of this.mergedInput.players) {
 
-            const PLAYER_SPEED = 10;
             let { fighter } = thisPlayer;
+            fighter.update(thisPlayer)
             
             // Show dpad frame for direction input. (Diagonal input is supported, but can't easily be shown with these sprites)
-            if (thisPlayer.direction.UP > 0) {
-                fighter.y -= PLAYER_SPEED;
-            }
-            if (thisPlayer.direction.RIGHT > 0) {
-                fighter.x += PLAYER_SPEED;
-            }
-            if (thisPlayer.direction.DOWN > 0) {
-                fighter.y += PLAYER_SPEED;
-            }
-            if (thisPlayer.direction.LEFT > 0) {
-                fighter.x -= PLAYER_SPEED;
-            }
+            // if (thisPlayer.direction.UP > 0) {
+            //     fighter.y -= PLAYER_SPEED;
+            // }
+            // if (thisPlayer.direction.RIGHT > 0) {
+            //     fighter.x += PLAYER_SPEED;
+            // }
+            // if (thisPlayer.direction.DOWN > 0) {
+            //     fighter.y += PLAYER_SPEED;
+            // }
+            // if (thisPlayer.direction.LEFT > 0) {
+            //     fighter.x -= PLAYER_SPEED;
+            // }
 
             for (let thisButton in thisPlayer.buttons) {
                 // do player actions
