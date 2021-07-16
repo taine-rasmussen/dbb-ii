@@ -7,9 +7,9 @@ const LUBRICATION = 50;
 const ControlScheme = Object.freeze({
   // Flappy-bird-esque jumping
   ACTION_FLAP: "B0",
-  STANCE_DASH: "B5",
-  STANCE_BLOCK: "B4",
-  STANCE_BALL: "B2",
+  STANCE_DASH: "keydown-B5",
+  STANCE_BLOCK: "keydown-B4",
+  STANCE_BALL: "keydown-B2",
 })
 
 const Stances = Object.freeze({
@@ -58,6 +58,9 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 
     if (this.y > 720) {
       this.y = -32
+    }
+    if (this.y < -32) {
+      this.y = 730
     }
 
     if (this.x < 0) {
