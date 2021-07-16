@@ -7,13 +7,15 @@ export default class Arena extends Phaser.Scene {
         this.load.scenePlugin('mergedInput', MergedInput);
 		this.load.multiatlas('gamepad', 'assets/gamepad.json', 'assets');
         this.load.image('player', 'assets/Player.png')
-        this.load.image('dash', 'assets/Dash.png')
         this.load.image('block', 'assets/Block.png')
+        this.load.image('dash', 'assets/Dash.png')
         this.load.image('ball', 'assets/Ball.png')
 
         //Setup for loading the base tilemap and required tile images
         this.load.image('base_tiles', 'assets/triangle.png')
         this.load.tilemapTiledJSON('tilemap', 'assets/tiler-initial-prac.json')
+
+        // this.load.image('crab', 'assets/crab.png')
     }
 
     create() {
@@ -31,8 +33,16 @@ export default class Arena extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 1280, 720)
         
         // create the player sprite    
+        // var crab = this.physics.add.sprite(200, 200, 'crab'); 
+        // crab.setBounce(0.5); // our crab will bounce from items
+        // crab.setCollideWorldBounds(true); // do
+        // crab.setScale(0.3)
+        
+        
+        // crab.body.setSize(crab.width, crab.height-8);
         
         middleLayer.setCollisionByProperty({ collides: true });
+        // this.physics.add.collider(middleLayer, crab);
         
         middleLayer.setCollisionByExclusion([-1]);
         
@@ -47,7 +57,6 @@ export default class Arena extends Phaser.Scene {
             this.add.existing(player.fighter);
             this.physics.add.existing(player.fighter, false);
             this.physics.add.collider(middleLayer, player.fighter);
-            
             });
 
 
@@ -146,18 +155,20 @@ export default class Arena extends Phaser.Scene {
             //     fighter.x -= PLAYER_SPEED;
             // }
 
+            for (let thisButton in thisPlayer.buttons) {
+                // do player actions
+                // (shape cycling etc.)
+            }
         }
 
-        this.playerTexts.forEach((text, i) => {
-            text.setText([
-                `Player ${i + 1}', 'Gamepad: ` + (typeof this.mergedInput.getPlayer(i).gamepad.index === 'undefined' ? 'Press a button to connect' : this.mergedInput.getPlayer(i).gamepad.id),
-                'Directions: ' + JSON.stringify(this.mergedInput.getPlayer(i).direction),
-                'Buttons: ' + JSON.stringify(this.mergedInput.getPlayer(i).buttons),
-                'Interaction: ' + JSON.stringify(this.mergedInput.getPlayer(i).interaction)
-            ])
-        })
-
-        this.physics.world.wrap
+        // this.playerTexts.forEach((text, i) => {
+        //     text.setText([
+        //         `Player ${i + 1}', 'Gamepad: ` + (typeof this.mergedInput.getPlayer(i).gamepad.index === 'undefined' ? 'Press a button to connect' : this.mergedInput.getPlayer(i).gamepad.id),
+        //         'Directions: ' + JSON.stringify(this.mergedInput.getPlayer(i).direction),
+        //         'Buttons: ' + JSON.stringify(this.mergedInput.getPlayer(i).buttons),
+        //         'Interaction: ' + JSON.stringify(this.mergedInput.getPlayer(i).interaction)
+        //     ])
+        // })
 
         // this.player2Text.setText(JSON.stringify(this.mergedInput.debug().players, null, "\t"));
 
