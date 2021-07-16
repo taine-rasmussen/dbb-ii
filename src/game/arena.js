@@ -10,6 +10,10 @@ export default class Arena extends Phaser.Scene {
         this.load.image('dash', 'assets/Dash.png')
         this.load.image('block', 'assets/Block.png')
         this.load.image('ball', 'assets/Ball.png')
+
+        //Setup for loading the base tilemap and required tile images
+        this.load.image('base_tiles', 'assets/triangle.png')
+        this.load.tilemapTiledJSON('tilemap', 'assets/tiler-initial-prac.json')
     }
 
     create() {
