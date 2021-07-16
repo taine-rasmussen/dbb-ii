@@ -1,17 +1,52 @@
 import MergedInput from "../main";
-
+import Fighter from './Fighter'
 export default class Arena extends Phaser.Scene {
 
 
     preload() {
         this.load.scenePlugin('mergedInput', MergedInput);
 		this.load.multiatlas('gamepad', 'assets/gamepad.json', 'assets');
+        this.load.image('player', 'assets/Player.png')
+        this.load.image('dash', 'assets/Dash.png')
+        this.load.image('block', 'assets/Block.png')
+        this.load.image('ball', 'assets/Ball.png')
     }
 
     create() {
+
+        //Setup for loading the base tilemap and required tile images
+        const map = this.make.tilemap({ key: 'tilemap' })
+        const tileset = map.addTilesetImage('Triangle', 'base_tiles')
+        // create the layers we want in the right order
+	    const backgroundLayer = map.createLayer('Tile Layer 1', tileset, 0, 0)
+        const middleLayer = map.createLayer('Tile Layer 2', tileset, 0, 0)
+        backgroundLayer.setScale(0.8)
+        middleLayer.setScale(0.8)
+
+        
+        this.physics.world.setBounds(0, 0, 1280, 720)
+        
+        // create the player sprite    
+        
+        middleLayer.setCollisionByProperty({ collides: true });
+        
+        middleLayer.setCollisionByExclusion([-1]);
+        
+
         // Set up player objects
         this.players = Array.from(new Array(this.numberOfPlayers)).map((_, i) => this.mergedInput.addPlayer(i))
         console.dir(this.players)
+
+
+        this.players.forEach((player, i) => {
+            player.fighter = new Fighter(this, 400, 400);
+            this.add.existing(player.fighter);
+            this.physics.add.existing(player.fighter, false);
+            this.physics.add.collider(middleLayer, player.fighter);
+            
+            });
+
+
 
         // Define keys (player, action, key, append)
 		this.mergedInput
@@ -87,27 +122,26 @@ export default class Arena extends Phaser.Scene {
 
     update() {
 
-        // Loop through player object
+        // Loop through player inputs
         for (let thisPlayer of this.mergedInput.players) {
 
+            let { fighter } = thisPlayer;
+            fighter.update(thisPlayer)
+            
             // Show dpad frame for direction input. (Diagonal input is supported, but can't easily be shown with these sprites)
-            if (thisPlayer.direction.UP > 0) {
-                // TODO: move player up
-            }
-            if (thisPlayer.direction.RIGHT > 0) {
-                // TODO: move player right
-            }
-            if (thisPlayer.direction.DOWN > 0) {
-                // TODO: move player down
-            }
-            if (thisPlayer.direction.LEFT > 0) {
-                // TODO: move player left
-            }
+            // if (thisPlayer.direction.UP > 0) {
+            //     fighter.y -= PLAYER_SPEED;
+            // }
+            // if (thisPlayer.direction.RIGHT > 0) {
+            //     fighter.x += PLAYER_SPEED;
+            // }
+            // if (thisPlayer.direction.DOWN > 0) {
+            //     fighter.y += PLAYER_SPEED;
+            // }
+            // if (thisPlayer.direction.LEFT > 0) {
+            //     fighter.x -= PLAYER_SPEED;
+            // }
 
-            for (let thisButton in thisPlayer.buttons) {
-                // do player actions
-                // (shape cycling etc.)
-            }
         }
 
         this.playerTexts.forEach((text, i) => {
@@ -118,6 +152,8 @@ export default class Arena extends Phaser.Scene {
                 'Interaction: ' + JSON.stringify(this.mergedInput.getPlayer(i).interaction)
             ])
         })
+
+        this.physics.world.wrap
 
         // this.player2Text.setText(JSON.stringify(this.mergedInput.debug().players, null, "\t"));
 
