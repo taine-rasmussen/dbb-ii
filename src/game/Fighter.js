@@ -24,6 +24,11 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     this.body.acceleration.x = ax * LUBRICATION;
     this.body.acceleration.y = ay * LUBRICATION;
 
+    const ball = () => {
+      this.setTexture('Ball')
+      this.setBounce(1)
+      setTimeout(1000)
+    }
   //   // if the player presses A:
   //   if (buttons["B0"]) {
   //     this._nextState();

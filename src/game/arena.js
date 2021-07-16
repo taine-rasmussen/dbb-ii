@@ -22,7 +22,7 @@ export default class Arena extends Phaser.Scene {
         const tileset = map.addTilesetImage('Triangle', 'base_tiles')
         // create the layers we want in the right order
 	    const backgroundLayer = map.createLayer('Tile Layer 1', tileset, 0, 0)
-        const middleLayer = map.createDynamicLayer('Tile Layer 2', tileset, 0, 0)
+        const middleLayer = map.createLayer('Tile Layer 2', tileset, 0, 0)
         backgroundLayer.setScale(0.8)
         middleLayer.setScale(0.8)
 
@@ -34,6 +34,7 @@ export default class Arena extends Phaser.Scene {
         crab.setBounce(0.5); // our crab will bounce from items
         crab.setCollideWorldBounds(true); // do
         crab.setScale(0.3)
+        
         
         crab.body.setSize(crab.width, crab.height-8);
         
@@ -53,6 +54,7 @@ export default class Arena extends Phaser.Scene {
             this.add.existing(player.fighter);
             this.physics.add.existing(player.fighter, false);
             this.physics.add.collider(middleLayer, player.fighter);
+            
             });
 
 
