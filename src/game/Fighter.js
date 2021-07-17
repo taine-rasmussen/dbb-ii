@@ -74,3 +74,4 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
   }
 }
 
+this.sound.play('lazer', { volume: 0.8 })
