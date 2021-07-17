@@ -11,6 +11,7 @@ function DefineArena(mapData, numberOfPlayers) {
 }
 
 const config = {
+    parent: 'monitor',
     type: Phaser.AUTO,
     width: 1280,
     height: 720,
