@@ -15,20 +15,20 @@
         padding: 0;
         background-color: #000;
       }
-      #container {
+       #container {
         max-width: 1280px;
         margin: auto;
       }
 
       #monitor {
-        background: #000;
+        background: radial-gradient(circle, rgba(0,0,0,1) 76%, rgba(2,0,36,1) 89%, rgba(113,113,113,1) 100%);
         position: relative;
-        border-top: 3px solid #888;
+        border-top: 3px solid rgb(71, 71, 71);
         margin: 5%;
         padding: 2% 2% 4% 2%;
         border-radius: 10px;
-        border-bottom-left-radius: 50% 2%;
-        border-bottom-right-radius: 50% 2%;
+        border-bottom-left-radius: 50% 5%;
+        border-bottom-right-radius: 50% 5%;
         transition: margin-right 1s;
       }
 
@@ -38,10 +38,10 @@
         position: absolute;
         bottom: 3%;
         left: 36%;
-        height: 0.5%;
+        height: 0.9%;
         width: 28%;
-        background: #ddd;
-        border-radius: 50%;
+        background: linear-gradient(0deg, rgb(133, 116, 116) 54%, rgb(65, 38, 0) 100%);
+        border-radius: 100%;
         box-shadow: 0 0 3px 0 white;
       }
 
@@ -50,11 +50,11 @@
         background-color: #777;
         background-size: cover;
         background-position: top center;
-        height: 0;
         width: 100%;
-        padding-bottom: 56.25%;
+        /* padding-bottom: 56.25%; */
         position: relative;
-        overflow: hidden;
+        overflow: hidden; 
+        height: 100%;
       }
 
       @media all and (min-width: 960px) {
@@ -96,7 +96,7 @@
             box-shadow: 0 0 60px 0 rgba(200, 220, 255, 0.6);
           }
         }
-      }
+      } 
     </style>
   </head>
 
