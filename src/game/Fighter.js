@@ -12,6 +12,7 @@ const ControlScheme = Object.freeze({
   STANCE_DASH: "B5",
   STANCE_BLOCK: "B4",
   STANCE_BALL: "B2",
+  dir: 'AIM'
 })
 
 export const Stances = Object.freeze({
@@ -35,12 +36,13 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 
   update(input) {
 
-    let {direction, buttons} = input;
-    let { UP, DOWN, LEFT, RIGHT } = direction;
+    let {direction, buttons, axe} = input;
+    let { UP, DOWN, LEFT, RIGHT, AIM } = direction;
     let accelerationX = RIGHT - LEFT;
     let accelerationY = DOWN - UP;
     this.body.acceleration.x = accelerationX * LUBRICATION;
     this.body.acceleration.y = accelerationY * LUBRICATION;
+    // console.log(input.gamepad.leftStick)
 
     
     // if the player presses A:
@@ -51,7 +53,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     } else if (buttons[this.controlScheme.STANCE_BLOCK]) {
       Block.bind(this)();
     } else if (buttons[this.controlScheme.STANCE_DASH]) {
-      Dash.bind(this)();
+      Dash.bind(this)(input.gamepad.leftStick);
     } else {
       Reset.bind(this)()
     }

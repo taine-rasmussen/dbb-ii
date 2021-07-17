@@ -3,7 +3,7 @@ function Reset() {
   this.body.moves = true
   this.setState('base')
   this.setTexture('player')
-  this.body.setSize()
+  // this.body.setSize()
 }
 
 export default Reset
