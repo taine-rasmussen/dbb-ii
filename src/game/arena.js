@@ -15,7 +15,14 @@ export default class Arena extends Phaser.Scene {
         this.load.image('base_tiles', 'assets/triangle.png')
         this.load.tilemapTiledJSON('tilemap', 'assets/tiler-initial-prac.json')
 
-        // this.load.image('crab', 'assets/crab.png')
+        //sound set up
+        this.load.audio('battery', 'assets/battery.wav')
+        this.load.audio('lazer', 'assets/lazer.wav')
+        this.load.audio('blaster', 'assets/blaster.mp3')
+        this.load.audio('numkey', 'assets/numkey.wav')
+        this.load.audio('stop', 'assets/stop.wav')
+        this.load.audio('keys', 'assets/keys.wav')
+
     }
 
     create() {
