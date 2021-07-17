@@ -4,7 +4,7 @@ import Ball from "./stances/Ball"
 import Reset from './stances/Reset'
 import Hop from './stances/Hop'
 
-const LUBRICATION = 100;
+const LUBRICATION = 200;
 
 const ControlScheme = Object.freeze({
   // Flappy-bird-esque jumping
@@ -35,13 +35,13 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
   }
 
   update(input) {
-
     let {direction, buttons, axe} = input;
     let { UP, DOWN, LEFT, RIGHT, AIM } = direction;
     let accelerationX = RIGHT - LEFT;
     let accelerationY = DOWN - UP;
     this.body.acceleration.x = accelerationX * LUBRICATION;
-    this.body.acceleration.y = accelerationY * LUBRICATION;
+    // this.body.acceleration.y = accelerationY * LUBRICATION;
+    this.body.setDrag(300, 0)
     // console.log(input.gamepad.leftStick)
 
     
@@ -49,6 +49,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     if (buttons[this.controlScheme.ACTION_FLAP]) {
       Hop.bind(this)()
     } else if  (buttons[this.controlScheme.STANCE_BALL]) {
+      this.body.setCircle((this.width / 2) - 40)
       Ball.bind(this)();
     } else if (buttons[this.controlScheme.STANCE_BLOCK]) {
       Block.bind(this)();
