@@ -8,8 +8,9 @@ export default class Arena extends Phaser.Scene {
 		this.load.multiatlas('gamepad', 'assets/gamepad.json', 'assets');
 
         //Setup for loading the base tilemap and required tile images
-        this.load.image('base_tiles', 'assets/triangle.png')
-        this.load.tilemapTiledJSON('tilemap', 'assets/tiler-initial-prac.json')
+        this.load.image('base_tiles', 'assets/gridtiles.png')
+        this.load.image('background_tiles', 'assets/Level1_background.png')
+        this.load.tilemapTiledJSON('tilemap', 'assets/Level1_ps.json')
 
         this.load.image('crab', 'assets/crab.png')
     }
@@ -18,10 +19,11 @@ export default class Arena extends Phaser.Scene {
 
         //Setup for loading the base tilemap and required tile images
         const map = this.make.tilemap({ key: 'tilemap' })
-        const tileset = map.addTilesetImage('Triangle', 'base_tiles')
+        const tileset = map.addTilesetImage('platforms_L1', 'base_tiles')
+        const backgroundTileset = map.addTilesetImage('background_ps', 'background_tiles')
         // create the layers we want in the right order
-	    const backgroundLayer = map.createLayer('Tile Layer 1', tileset, 0, 0)
-        const middleLayer = map.createDynamicLayer('Tile Layer 2', tileset, 0, 0)
+	    const backgroundLayer = map.createLayer('backgroundLayer', backgroundTileset, 0, 0)
+        const middleLayer = map.createLayer('middleLayer', tileset, 0, 0)
         backgroundLayer.setScale(0.8)
         middleLayer.setScale(0.8)
 
@@ -29,9 +31,9 @@ export default class Arena extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 1280, 720)
         
         // create the player sprite    
-        var crab = this.physics.add.sprite(200, 200, 'crab'); 
+        const crab = this.physics.add.sprite(200, 200, 'crab'); 
         crab.setBounce(0.5); // our crab will bounce from items
-        crab.setCollideWorldBounds(true); // do
+        crab.setCollideWorldBounds(true); 
         crab.setScale(0.3)
         
         crab.body.setSize(crab.width, crab.height-8);
@@ -40,6 +42,21 @@ export default class Arena extends Phaser.Scene {
         this.physics.add.collider(middleLayer, crab);
         middleLayer.setCollisionByExclusion([-1]);
         
+        //doesn't work yet, to test the layer's collision bounds
+        const crabCursors = this.input.keyboard.createCursorKeys();
+        if (crabCursors.left.isDown) // if the left arrow key is down
+        {
+            crab.body.setVelocityX(-200); // move left
+        }
+        else if (crabCursors.right.isDown) // if the right arrow key is down
+        {
+            crab.body.setVelocityX(200); // move right
+        }
+        if ((crabCursors.space.isDown || crabCursors.up.isDown) && crab.body.onFloor())
+        {
+            crab.body.setVelocityY(-500); // jump up
+        }
+
 
         // Set up player objects
         this.players = Array.from(new Array(this.numberOfPlayers)).map((_, i) => this.mergedInput.addPlayer(i))
