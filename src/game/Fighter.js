@@ -1,8 +1,10 @@
 import Dash from "./stances/Dash"
 import Block from "./stances/Block"
 import Ball from "./stances/Ball"
+import Reset from './stances/Reset'
+import Hop from './stances/Hop'
 
-const LUBRICATION = 50;
+const LUBRICATION = 100;
 
 const ControlScheme = Object.freeze({
   // Flappy-bird-esque jumping
@@ -12,10 +14,11 @@ const ControlScheme = Object.freeze({
   STANCE_BALL: "B2",
 })
 
-const Stances = Object.freeze({
+export const Stances = Object.freeze({
   DASH: "DASH",
   BLOCK: "BLOCK",
-  BALL: "BALL"
+  BALL: "BALL",
+  BASE: 'BASE'
 });
 
 // const States = 
@@ -39,30 +42,27 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     this.body.acceleration.x = accelerationX * LUBRICATION;
     this.body.acceleration.y = accelerationY * LUBRICATION;
 
+    
     // if the player presses A:
     if (buttons[this.controlScheme.ACTION_FLAP]) {
-     console.log(`P${input.index+1} is flapping: Flap! Flap!`);
-    }
-
-    if  (buttons[this.controlScheme.STANCE_BALL]) {
+      Hop.bind(this)()
+    } else if  (buttons[this.controlScheme.STANCE_BALL]) {
       Ball.bind(this)();
-    }
-
-    if (buttons[this.controlScheme.STANCE_BLOCK]) {
+    } else if (buttons[this.controlScheme.STANCE_BLOCK]) {
       Block.bind(this)();
-    }
-
-    if (buttons[this.controlScheme.STANCE_DASH]) {
+    } else if (buttons[this.controlScheme.STANCE_DASH]) {
       Dash.bind(this)();
+    } else {
+      Reset.bind(this)()
     }
-
+    
     if (this.y > 720) {
       this.y = -32
     }
     if (this.y < -32) {
       this.y = 730
     }
-
+    
     if (this.x < 0) {
       this.x = 1279
     }
