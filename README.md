@@ -1,6 +1,8 @@
 # dbb-ii
 ❤️📗🌏
 
+## Kanban ##
+https://trello.com/b/OJPhbVZ0/dbb
 
 ## Vibes && Scrum ##
 
