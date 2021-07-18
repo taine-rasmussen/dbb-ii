@@ -42,6 +42,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     // if the player presses A:
     if (buttons[this.controlScheme.ACTION_FLAP]) {
      console.log(`P${input.index+1} is flapping: Flap! Flap!`);
+     //this.sound.play('lazer', { volume: 0.8 })
     }
 
     if  (buttons[this.controlScheme.STANCE_BALL]) {
@@ -55,6 +56,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     if (buttons[this.controlScheme.STANCE_DASH]) {
       Dash.bind(this)();
     }
+  
 
     if (this.y > 720) {
       this.y = -32
