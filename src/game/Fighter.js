@@ -7,6 +7,7 @@ import Hop from './stances/Hop'
 const LUBRICATION = 150;
 
 const ControlScheme = Object.freeze({
+  // Flappy-bird-esque jumping
   ACTION_FLAP: "B0",
   STANCE_DASH: "B5",
   STANCE_BLOCK: "B4",
