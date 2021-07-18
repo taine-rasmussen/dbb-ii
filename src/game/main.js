@@ -21,12 +21,12 @@ const config = {
     physics: {
         default: "arcade",
         arcade: {
-            gravity: { y: 300 },
-            debug: false,
+            gravity: { y: 1000 },
+            debug: true,
         }
     },
     scene: [
-       DefineArena(null, 3)
+       DefineArena("tiler-initial-prac.json", 3)
     ]
 };
 
