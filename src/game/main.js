@@ -26,7 +26,7 @@ const config = {
         }
     },
     scene: [
-       DefineArena(null, 3)
+       DefineArena("tiler-initial-prac.json", 3)
     ]
 };
 

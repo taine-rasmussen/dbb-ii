@@ -13,7 +13,7 @@ export default class Arena extends Phaser.Scene {
 
         //Setup for loading the base tilemap and required tile images
         this.load.image('base_tiles', 'assets/triangle.png')
-        this.load.tilemapTiledJSON('tilemap', 'assets/tiler-initial-prac.json')
+        this.load.tilemapTiledJSON('tilemap', `assets/${this.mapData}`)
 
         // this.load.image('crab', 'assets/crab.png')
     }
@@ -32,7 +32,7 @@ export default class Arena extends Phaser.Scene {
         //smooth out fps
         // this.physics.world.syncToRender = true;
         this.physics.world.fixedStep = false;
-        this.physics.world.fixedDelta = true;
+        // this.physics.world.fixedDelta = true;
 
         this.physics.world.setBounds(0, 0, 1280, 720)
         
