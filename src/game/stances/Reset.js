@@ -1,7 +1,9 @@
-function Reset(accelerationX, LUBRICATION) {
+import { Stances } from "../fighter"
+
+function Reset() {
   this.body.moves = true
 
-  this.setState('base')
+  this.setState(Stances.BASE)
   this.setTexture('player')
   this.body.setBounce(0)
   if (this.input) {

@@ -1,13 +1,19 @@
-function Hop(stick, accelerationX, accelerationY, LUBRICATION) {
-  if (this.state === "base") {
-    this.setRotation(stick.angle());
-    this.body.setMaxSpeed(800);
+import { Stances } from "../fighter";
+
+const HOP_SPEED = 10000;
+const HOPPER_MAX_SPEED = 800;
+// const JUMP_COOLDOWN = 3000;
+
+function Hop(angle, x, y) {
+    if (this.state == Stances.BASE) {
+    this.setRotation(angle);
+    this.body.setMaxSpeed(HOPPER_MAX_SPEED);
     this.body.setDrag(0, 0)
 
-    this.body.setVelocityY(stick.y * 10000)
-    this.body.setVelocityX(stick.x * 10000);
+    this.body.setVelocityY(y * HOP_SPEED)
+    this.body.setVelocityX(x * HOP_SPEED);
     console.log("X: ", this.body.velocity.x);
-    this.setState("jumped");
+    this.setState("jumped")
   }
 }
 

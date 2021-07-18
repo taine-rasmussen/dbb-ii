@@ -8,10 +8,10 @@ const LUBRICATION = 150;
 
 const ControlScheme = Object.freeze({
   // Flappy-bird-esque jumping
-  ACTION_FLAP: "B0",
-  STANCE_DASH: "B5",
-  STANCE_BLOCK: "B4",
-  STANCE_BALL: "B2",
+  HOP: "B0",
+  DASH: "B5",
+  BLOCK: "B4",
+  BALL: "B2",
   dir: 'AIM'
 })
 
@@ -21,6 +21,7 @@ export const Stances = Object.freeze({
   BALL: "BALL",
   BASE: 'BASE'
 });
+
 export default class Fighter extends Phaser.GameObjects.Sprite {
   constructor(arena, x, y, controlScheme = ControlScheme) {
     super(arena, x, y)
@@ -29,28 +30,34 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     this.setTexture(this.sprite)
     this.setPosition(x, y)
     this.controlScheme = controlScheme
+    this.canJump = true;
   }
 
   update(input) {
-    let {direction, buttons} = input;
+    let {direction, buttons, gamepad } = input;
     let { UP, DOWN, LEFT, RIGHT} = direction;
-    let accelerationX = RIGHT - LEFT;
-    let accelerationY = DOWN - UP;
-    this.body.velocity.x = accelerationX * LUBRICATION;
+    let joystickX = RIGHT - LEFT;
+    let joystickY = DOWN - UP;
+    this.body.velocity.x = joystickX * LUBRICATION;
     this.body.setDrag(800, 0)
-    
-    if (buttons[this.controlScheme.ACTION_FLAP]) {
-      Hop.bind(this)(input.gamepad.leftStick, accelerationX, accelerationY, LUBRICATION)
-    } else if  (buttons[this.controlScheme.STANCE_BALL]) {
+
+    let { HOP, BALL, BLOCK, DASH } = this.controlScheme;
+    let angle = Math.atan2(joystickY, joystickX);
+    // let angle = input.gamepad.leftStick.angle() || "Doesn't exist!"
+    console.log(Object.keys(input))
+
+    if (buttons[HOP]) {
+      Hop.bind(this)(angle, joystickX, joystickY)
+    } else if  (buttons[BALL]) {
       this.body.setCircle((this.width / 2) - 40)
-      Ball.bind(this)(input.gamepad.leftStick);
-    } else if (buttons[this.controlScheme.STANCE_BLOCK]) {
-      Block.bind(this)(input.gamepad.leftStick);
-    } else if (buttons[this.controlScheme.STANCE_DASH]) {
-      Dash.bind(this)(input.gamepad.leftStick);
-      setTimeout(() => Reset.bind(this)(accelerationX, LUBRICATION, input.gamepad.leftStick), 1000)
+      Ball.bind(this)(angle, joystickX, joystickY);
+    } else if (buttons[BLOCK]) {
+      Block.bind(this)(angle, joystickX, joystickY);
+    } else if (buttons[DASH]) {
+      Dash.bind(this)(angle, joystickX, joystickY);
+      setTimeout(() => Reset.call(this), 1000)
     } else {
-      Reset.bind(this)(accelerationX, LUBRICATION, input.gamepad.leftStick)
+      Reset.bind(this)(joystickX, LUBRICATION, input.gamepad.leftStick)
     }
     
     if (this.y > 720) {
