@@ -41,7 +41,6 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     
     if (buttons[this.controlScheme.ACTION_FLAP]) {
      console.log(`P${input.index+1} is flapping: Flap! Flap!`);
-     //this.sound.play('lazer', { volume: 0.8 })
     }
 
     if  (buttons[this.controlScheme.STANCE_BALL]) {

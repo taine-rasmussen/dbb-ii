@@ -4,6 +4,7 @@ function Ball(stick) {
     this.setTexture("ball")
     this.setState('ball')
     this.body.setDrag(0, 0)
+    this.sound.play('battery', { volume: 0.8 })
     
     this.body.setBounce(1.2)
     // this.body.gravity.y = 1.5;
