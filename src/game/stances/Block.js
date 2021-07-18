@@ -1,4 +1,5 @@
-function Block() {
+function Block(stick) {
+    this.setRotation(stick.angle())
     this.setTexture("block")
     this.setState('block')
     this.body.stop()
