@@ -52,12 +52,32 @@ export default class Arena extends Phaser.Scene {
         console.dir(this.players)
 
 
-        this.players.forEach((player, i) => {
-            player.fighter = new Fighter(this, 400, 400);
+
+        // Spawn locations
+            // Top left === 100, 100
+            // Top right === 1000, 100
+            // Middle === 650, 200
+            // Bottom left === 400, 400
+            // Bottom right === 1000, 400
+
+        // Array of random spawn cords
+        let spawnCords = [[100, 100], [1000, 100], [650, 200], [400, 400], [1000, 400]]
+
+        // Gets random spawn cords and returns array of both X & Y cords
+         const setSpawn = () => {
+            let randomSpawn = spawnCords[Math.floor(Math.random() * spawnCords.length)];
+            return randomSpawn 
+        } 
+
+        // Still possible for double up spawn - how to remove cords from array once used??
+        this.players.forEach((player, i) => {     
+            let spawnCord = setSpawn()
+            console.log(spawnCord)
+            player.fighter = new Fighter(this, spawnCord[0], spawnCord[1]) 
             this.add.existing(player.fighter);
             this.physics.add.existing(player.fighter, false);
-            this.physics.add.collider(middleLayer, player.fighter);
-            });
+            this.physics.add.collider(middleLayer, player.fighter);    
+        });
 
 
 
