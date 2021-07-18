@@ -1,4 +1,4 @@
-function Hop(stick, accelerationX, accelerationY, LUBRICATION) {
+function Hop(stick) {
   if (this.state === "base") {
     this.setRotation(stick.angle());
     this.body.setMaxSpeed(800);
