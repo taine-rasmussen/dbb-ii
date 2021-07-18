@@ -1,6 +1,7 @@
 function Hop(stick) {
   if (this.state === "base") {
-    this.setRotation(stick.angle());
+    console.log(stick)
+    // this.setRotation(stick.angle());
     this.body.setMaxSpeed(800);
     this.body.setDrag(0, 0)
 
