@@ -12,10 +12,10 @@ const HOP_SPEED = 1e4;
 const DASH_SPEED = 800;
 
 const ControlScheme = Object.freeze({
-  HOP: "B1",
-  DASH: "B8",
-  BLOCK: "B5",
-  BALL: "B3",
+  HOP: "B0",
+  DASH: "B5",
+  BLOCK: "B4",
+  BALL: "B2",
   dir: "AIM",
 });
 
