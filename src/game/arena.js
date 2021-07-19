@@ -56,20 +56,31 @@ export default class Arena extends Phaser.Scene {
       this.mergedInput.addPlayer(i)
     );
 
+
+    // [115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250] Inital 4 spawns
+
+// *** Random player spawns ***
+    let spawnPoints = [[115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250]]
+        console.log('Current number of players is:', this.players.length)
+
     let playerGroup = this.add.group();
-    this.starts = [
-      [280, 600],
-      [1000, 150],
-      [500, 300],
-      [400, 100],
-    ];
+    var randomSpawn = [];
+
+    for (var i = 0; i < this.players.length; i++) {
+        var n = Math.floor(Math.random() * spawnPoints.length);
+        randomSpawn.push(spawnPoints[n]);
+        spawnPoints.splice(n, 1);
+    }       
 
     this.players.forEach((player, i) => {
-      let [x, y] = this.starts[i];
-      player.fighter = new Fighter(this, x, y);
-      this.add.existing(player.fighter);
-      this.physics.add.existing(player.fighter, false);
-      this.physics.add.collider(middleLayer, player.fighter);
+        console.log('Player spawned at:', 'X:',randomSpawn[i][0], 'Y:',randomSpawn[i][1])
+        player.fighter = new Fighter(this, randomSpawn[i][0], randomSpawn[i][1]) 
+        this.add.existing(player.fighter);
+        this.physics.add.existing(player.fighter, false);
+        this.physics.add.collider(middleLayer, player.fighter);
+// *** Random player spawns ***
+
+
 
       player.fighter.score = 0;
       player.index = i;
