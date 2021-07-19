@@ -211,7 +211,7 @@ export default class Arena extends Phaser.Scene {
         }
       );
 
-      const scoreTextSpace = 1000;
+      const scoreTextSpace = 200;
       this.scoreTexts[i] = this.add.text(
         100 + scoreTextSpace * i,
         50,
