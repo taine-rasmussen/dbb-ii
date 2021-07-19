@@ -3,6 +3,7 @@ import Block from "./stances/Block"
 import Ball from "./stances/Ball"
 import Reset from './stances/Reset'
 import Hop from './stances/Hop'
+import Phaser from "phaser"
 
 
 const LUBRICATION = 150;
@@ -32,24 +33,33 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
   }
 
   update(input, all) {
-    let {direction, buttons, gamepad} = input;
+    let {direction, buttons} = all[this.index];
+    // let gamepad = input.gamepad
+    let gamepad = all[this.index].gamepad
     let { UP, DOWN, LEFT, RIGHT} = direction;
     let accelerationX = RIGHT - LEFT;
+    let accelerationY = DOWN - UP;
+    let vec = new Phaser.Math.Vector2({ x: accelerationX, y: accelerationY })
+    let stick = gamepad.leftStick
     this.body.velocity.x = accelerationX * LUBRICATION;
     this.body.setDrag(400, 0)
+    // if (!gamepad.leftStick) {
+    // //   buttons = all[this.index].keys
+    //   console.log('kb')
+    // }
 
     if (buttons[this.controlScheme.ACTION_FLAP]) {
-      console.log(RIGHT, LEFT, accelerationX)
-      Hop.bind(this)(gamepad.leftStick)
+      console.log(all)
+      Hop.bind(this)(stick = vec)
     } else if  (buttons[this.controlScheme.STANCE_BALL]) {
       this.body.setCircle((this.width / 2) - 40)
-      Ball.bind(this)(gamepad.leftStick);
+      Ball.bind(this)(stick = vec);
     } else if (buttons[this.controlScheme.STANCE_BLOCK]) {
-      Block.bind(this)(gamepad.leftStick);
+      Block.bind(this)(stick = vec);
     } else if (buttons[this.controlScheme.STANCE_DASH]) {
-      Dash.bind(this)(gamepad.leftStick, input);
+      Dash.bind(this)(stick = vec, input);
     } else {
-      Reset.bind(this)(accelerationX, LUBRICATION, input.gamepad.leftStick)
+      Reset.bind(this)(accelerationX, LUBRICATION, stick = vec)
     }
     
     if (this.y > 720) {
@@ -67,4 +77,3 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     }
   }
 }
-
