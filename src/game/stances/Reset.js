@@ -18,7 +18,7 @@ function Reset(accelerationX, LUBRICATION, stick) {
     this.body.setBounce(0)
     this.body.setSize(605, 580)
     this.setScale(0.1)
-    this.body.setDrag(800, 0)
+    this.body.setDrag(400, 0)
   }
 }
 

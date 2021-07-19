@@ -1,10 +1,11 @@
 import MergedInput from "../main";
 import Fighter from './Fighter'
 import collision from "./collision"
+
 export default class Arena extends Phaser.Scene {
-
-
-preload() {
+  
+  
+  preload() {
   this.load.scenePlugin('mergedInput', MergedInput);
   this.load.multiatlas('gamepad', 'assets/gamepad.json', 'assets');
   this.load.image('player', 'assets/Player.png')
@@ -40,13 +41,15 @@ create() {
   this.player2 = this.mergedInput.addPlayer(2)
   
   var dudes = this.add.group()
-  const start = [[400, 400], [800, 400], [500, 300], [400, 100]]
+  this.start = [[280, 600], [1000, 150], [500, 300], [400, 100]]
   
   this.mergedInput.players.forEach((player, i) => {
-    player.fighter = new Fighter(this, start[i][0], start[i][1]);
+    player.fighter = new Fighter(this, this.start[i][0], this.start[i][1]);
     this.add.existing(player.fighter);
     this.physics.add.existing(player.fighter, false);
     this.physics.add.collider(middleLayer, player.fighter);
+    player.fighter.score = 0
+    player.fighter.start = this.start[i]
     dudes.add(player.fighter)
     this.mergedInput
     .defineKey(1, 'UP', 'W')
@@ -72,11 +75,11 @@ create() {
   
   this.playerTexts = []
   
-  this.mergedInput.players.forEach((_, i) => {
-    const spaceBetween = 50;
-    this.playerTexts[i] = this.add.text(50 + i * spaceBetween, 500 + i * spaceBetween, '', {
+  this.mergedInput.players.forEach((player, i) => {
+    const spaceBetween = 1000;
+    this.playerTexts[i] = this.add.text(100 + (spaceBetween * i), 50, player.fighter.score, {
       fontFamily: 'Arial',
-      fontSize: 14,
+      fontSize: 44,
       color: randomColor(),//'#00ff00'
     });
 
@@ -90,25 +93,26 @@ create() {
         return Math.floor(Math.random() * 256);
       }
     }
+    console.log(this.playerTexts)
   })
 
   // Instructions
-  this.instructions1 = this.add.text(50, 20, ['Directions: WASD', 'Buttons: 1-0'], {
-      fontFamily: 'Arial',
-      fontSize: 14,
-      color: '#00ff00'
-  });
-  this.instructions1 = this.add.text(740, 20, ['Directions: Cursors', 'Buttons: Numpad 1-0'], {
-      fontFamily: 'Arial',
-      fontSize: 14,
-      color: '#00ff00'
-  });
+  // var scores1 = this.add.text(50, 20, scores[0], {
+  //     fontFamily: 'Arial',
+  //     fontSize: 34,
+  //     color: '#00ff00'
+  // });
+  // var scores2 = this.add.text(740, 20, scores[1], {
+  //     fontFamily: 'Arial',
+  //     fontSize: 34,
+  //     color: '#00ff00'
+  // });
 }
 
 update() {
   // Loop through player inputs
   for (let thisPlayer of this.mergedInput.players) {
-    // console.log(thisPlayer)
+    this.playerTexts[thisPlayer.index].text = thisPlayer.fighter.score
     let { fighter } = thisPlayer;
     fighter.update(thisPlayer, this.mergedInput.players)
       
