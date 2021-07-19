@@ -33,6 +33,8 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     // except here we called it 'arena' instead.
     super(arena, x, y);
 
+    this.spawn = {x, y};
+
     // Ensure correct sprite size
     this.setScale(0.1);
 
