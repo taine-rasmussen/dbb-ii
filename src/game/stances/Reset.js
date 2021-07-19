@@ -1,8 +1,8 @@
 function Reset(accelerationX, LUBRICATION, stick) {
   if (this.state === 'dash') {
-    this.setRotation(stick.angle())
-    this.body.setVelocityX(stick.x * 800)
-    this.body.setVelocityY(stick.y * 800)
+    // this.setRotation(stick.angle())
+    // this.body.setVelocityX(stick.x * 800)
+    // this.body.setVelocityY(stick.y * 800)
     setTimeout(() => {
       this.body.moves = true
       this.setState('base')

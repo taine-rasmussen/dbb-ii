@@ -56,7 +56,7 @@ create() {
     .defineKey(1, 'DOWN', 'S')
     .defineKey(1, 'LEFT', 'A')
     .defineKey(1, 'RIGHT', 'D')
-    .defineKey(i, 'Bi', 'ONE')
+    .defineKey(i, 'B0', 'ONE')
     .defineKey(i, 'B1', 'TWO')
     .defineKey(i, 'B2', 'THREE')
     .defineKey(i, 'B3', 'FOUR')

@@ -1,5 +1,5 @@
 function Ball(stick) {
-    this.setRotation(stick.angle())
+    // this.setRotation(stick.angle())
     this.body.setMaxSpeed(850)
     this.setTexture("ball")
     this.setState('ball')
