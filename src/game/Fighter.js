@@ -8,7 +8,7 @@ const ARENA_HEIGHT = 720; // neither should this!
 // milliseconds between dash use
 const DASH_COOLDOWN = 5000;
 
-const HOP_SPEED = 1e4;
+const HOP_SPEED = 1e3;
 const DASH_SPEED = 800;
 
 const ControlScheme = Object.freeze({
@@ -24,7 +24,6 @@ export const Stances = Object.freeze({
   BLOCK: "BLOCK",
   BALL: "BALL",
   IDLE: "IDLE",
-  JUMPED: "JUMPED",
 });
 
 export default class Fighter extends Phaser.GameObjects.Sprite {
@@ -33,7 +32,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     // except here we called it 'arena' instead.
     super(arena, x, y);
 
-    this.spawn = {x, y};
+    this.spawn = { x, y };
 
     // Ensure correct sprite size
     this.setScale(0.1);
@@ -63,7 +62,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     // Handle button presses
     let { HOP, BALL, BLOCK, DASH } = this.controlScheme;
     if (buttons[HOP]) {
-      Hop(this, dx * DEFAULT_SPEED, dy * HOP_SPEED);
+      Hop(this, dx * HOP_SPEED, dy * HOP_SPEED);
     } else if (buttons[BALL]) {
       Ball(this, dx * DEFAULT_SPEED);
     } else if (buttons[BLOCK]) {

@@ -108,7 +108,8 @@ export default class Arena extends Phaser.Scene {
     //   fighter.body.setCollisionGroup(playerGroup)
     // }
 
-    function collision(fighter1, fighter2) {
+    function rockPaperScissors(fighter1, fighter2) {
+      // Dash > Idle
       if (fighter1.state === Stances.DASH && fighter2.state === Stances.IDLE) {
         handleWin(fighter1, fighter2);
       } else if (
@@ -121,11 +122,12 @@ export default class Arena extends Phaser.Scene {
         fighter2.state === Stances.BLOCK
       ) {
         handleWin(fighter1, fighter2);
+        // Ball > Block
       } else if (
         fighter1.state === Stances.BLOCK &&
         fighter2.state === Stances.BALL
       ) {
-        handleWin(fighter1, fighter2);
+        handleWin(fighter2, fighter1);
       } else if (
         fighter1.state === Stances.BLOCK &&
         fighter2.state === Stances.DASH
@@ -147,6 +149,7 @@ export default class Arena extends Phaser.Scene {
       ) {
         handleWin(fighter1, fighter2);
       } else if (
+        // Ball > Idle
         fighter1.state === Stances.BALL &&
         fighter2.state === Stances.IDLE
       ) {
@@ -163,7 +166,7 @@ export default class Arena extends Phaser.Scene {
     for (let a of this.players) {
       for (let b of this.players) {
         if (a.index != b.index) {
-          this.physics.add.collider(a.fighter, b.fighter, collision);
+          this.physics.add.collider(a.fighter, b.fighter, rockPaperScissors);
         }
       }
     }
@@ -194,7 +197,7 @@ export default class Arena extends Phaser.Scene {
         {
           fontFamily: "Arial",
           fontSize: 44,
-          color: randomColor(), //'#00ff00'
+          color: "white", //'#00ff00'
         }
       );
 
@@ -209,28 +212,6 @@ export default class Arena extends Phaser.Scene {
         }
       }
     });
-
-    // Instructions
-    this.instructions1 = this.add.text(
-      50,
-      20,
-      ["Directions: WASD", "Buttons: 1-0"],
-      {
-        fontFamily: "Arial",
-        fontSize: 14,
-        color: "#00ff00",
-      }
-    );
-    this.instructions1 = this.add.text(
-      740,
-      20,
-      ["Directions: Cursors", "Buttons: Numpad 1-0"],
-      {
-        fontFamily: "Arial",
-        fontSize: 14,
-        color: "#00ff00",
-      }
-    );
   }
 
   update() {
@@ -242,18 +223,18 @@ export default class Arena extends Phaser.Scene {
       this.scoreTexts[i].setText(player.fighter.score);
     });
 
-    this.debugTexts.forEach((text, i) => {
-      text.setText([
-        `Player ${i + 1}', 'Gamepad: ` +
-          (typeof this.mergedInput.getPlayer(i).gamepad.index === "undefined"
-            ? "Press a button to connect"
-            : this.mergedInput.getPlayer(i).gamepad.id),
-        "Directions: " +
-          JSON.stringify(this.mergedInput.getPlayer(i).direction),
-        "Buttons: " + JSON.stringify(this.mergedInput.getPlayer(i).buttons),
-        "Interaction: " +
-          JSON.stringify(this.mergedInput.getPlayer(i).interaction),
-      ]);
-    });
+    // this.debugTexts.forEach((text, i) => {
+    //   text.setText([
+    //     `Player ${i + 1}', 'Gamepad: ` +
+    //       (typeof this.mergedInput.getPlayer(i).gamepad.index === "undefined"
+    //         ? "Press a button to connect"
+    //         : this.mergedInput.getPlayer(i).gamepad.id),
+    //     "Directions: " +
+    //       JSON.stringify(this.mergedInput.getPlayer(i).direction),
+    //     "Buttons: " + JSON.stringify(this.mergedInput.getPlayer(i).buttons),
+    //     "Interaction: " +
+    //       JSON.stringify(this.mergedInput.getPlayer(i).interaction),
+    //   ]);
+    // });
   }
 }
