@@ -6,6 +6,7 @@ function Ball(stick) {
     this.body.setDrag(0, 0)
     this.body.setBounce(1.2)
     this.body.setCircle(280)
+    //this.sound.play('battery', { volume: 0.8 })
 }
 
 export default Ball;

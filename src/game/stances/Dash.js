@@ -9,6 +9,7 @@ function Dash(stick, input) {
     // this.body.setVelocityY(stick.y * 800)
     // input.enabled = false666d6ada
     this.setState('dash')
+    //this.sound.play('lazer', { volume: 0.8 })
   }
 }
 

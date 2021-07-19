@@ -45,9 +45,9 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
       this.body.setCircle((this.width / 2) - 40)
       Ball.bind(this)();
     } else if (buttons[this.controlScheme.STANCE_BLOCK]) {
-      Block.bind(this)();
+      Block.bind(this)(this.sound.play('stop', { volume: 0.8 }));
     } else if (buttons[this.controlScheme.STANCE_DASH]) {
-      Dash.bind(this)();
+      Dash.bind(this)(this.sound.play('lazer', { volume: 0.8 }));
     } else {
       Reset.bind(this)(accelerationX, LUBRICATION)
     }
