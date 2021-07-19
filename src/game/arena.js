@@ -1,3 +1,4 @@
+import { Data } from "phaser";
 import MergedInput from "../main";
 import Fighter from './Fighter'
 export default class Arena extends Phaser.Scene {
@@ -6,10 +7,11 @@ export default class Arena extends Phaser.Scene {
         super({ key: "Arena" })
     }
 
-    init({ map, players })
+    init(data)
     {
-        this.mapData = map
-        this.numberOfPlayers = players
+        console.log('init', data)
+        this.mapData = data.map
+        this.numberOfPlayers = data.players
     }
 
     preload() {
@@ -22,7 +24,7 @@ export default class Arena extends Phaser.Scene {
 
         //Setup for loading the base tilemap and required tile images
         this.load.image('base_tiles', 'assets/triangle.png')
-        this.load.tilemapTiledJSON('tilemap', `assets/tiler-initial-prac.json`)
+        this.load.tilemapTiledJSON('tilemap', `assets/${this.mapData}`)
     }
 
     create() {
