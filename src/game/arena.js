@@ -40,6 +40,7 @@ export default class Arena extends Phaser.Scene {
     // Set up player objects
     this.player1 = this.mergedInput.addPlayer(1)
     this.player2 = this.mergedInput.addPlayer(2)
+    this.player3 = this.mergedInput.addPlayer(2)
     
     var dudes = this.add.group()
     this.start = [[280, 600], [1000, 150], [500, 300], [400, 100]]
@@ -72,7 +73,8 @@ export default class Arena extends Phaser.Scene {
 
   
     this.physics.add.collider(this.player1.fighter, this.player2.fighter, collision)
-    console.log(this.mergedInput)
+    this.physics.add.collider(this.player1.fighter, this.player3.fighter, collision)
+    this.physics.add.collider(this.player2.fighter, this.player3.fighter, collision)
     // Set up some debug text
     
     this.playerTexts = []
