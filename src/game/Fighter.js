@@ -35,11 +35,11 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     let {direction, buttons, gamepad} = input;
     let { UP, DOWN, LEFT, RIGHT} = direction;
     let accelerationX = RIGHT - LEFT;
-    // this.body.velocity.x = accelerationX * LUBRICATION;
-    // this.body.setDrag(0, 0)
+    this.body.velocity.x = accelerationX * LUBRICATION;
+    this.body.setDrag(400, 0)
 
     if (buttons[this.controlScheme.ACTION_FLAP]) {
-      console.log(this)
+      console.log(RIGHT, LEFT, accelerationX)
       Hop.bind(this)(gamepad.leftStick)
     } else if  (buttons[this.controlScheme.STANCE_BALL]) {
       this.body.setCircle((this.width / 2) - 40)
