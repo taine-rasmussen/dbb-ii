@@ -12,16 +12,27 @@ export default class Arena extends Phaser.Scene {
 
     //Setup for loading the base tilemap and required tile images
     this.load.tilemapTiledJSON("tilemap", `assets/${this.mapData}`);
-    this.load.image("base_tiles", "assets/triangle.png");
+    this.load.image("base_tiles", `assets/${this.tileData}`);
+    this.load.image("background_tiles", `assets/${this.backgroundData}`);
   }
 
   create() {
     //Setup for loading the base tilemap and required tile images
     const map = this.make.tilemap({ key: "tilemap" });
-    const tileset = map.addTilesetImage("Triangle", "base_tiles");
-    // create the layers we want in the right order
-    const backgroundLayer = map.createLayer("Tile Layer 1", tileset, 0, 0);
-    const middleLayer = map.createLayer("Tile Layer 2", tileset, 0, 0);
+
+    const backgroundTileset = map.addTilesetImage(
+      "sun_background",
+      "background_tiles"
+    );
+    const backgroundLayer = map.createLayer(
+      "backgroundLayer",
+      backgroundTileset,
+      0,
+      0
+    );
+    const middleTileset = map.addTilesetImage("platforms_L1", "base_tiles");
+    const middleLayer = map.createLayer("middleLayer", middleTileset, 0, 0);
+
     backgroundLayer.setScale(0.8);
     middleLayer.setScale(0.8);
 
@@ -38,20 +49,24 @@ export default class Arena extends Phaser.Scene {
       this.mergedInput.addPlayer(i)
     );
 
-    let playerGroup = this.add.group()
-    this.starts = [[280, 600], [1000, 150], [500, 300], [400, 100]]
-
+    let playerGroup = this.add.group();
+    this.starts = [
+      [280, 600],
+      [1000, 150],
+      [500, 300],
+      [400, 100],
+    ];
 
     this.players.forEach((player, i) => {
-      let [x, y] = this.starts[i]
+      let [x, y] = this.starts[i];
       player.fighter = new Fighter(this, x, y);
       this.add.existing(player.fighter);
       this.physics.add.existing(player.fighter, false);
       this.physics.add.collider(middleLayer, player.fighter);
 
       player.fighter.score = 0;
-      player.index = i
-      playerGroup.add(player.fighter)
+      player.index = i;
+      playerGroup.add(player.fighter);
     });
 
     // Define keys (player, action, key, append)
@@ -88,51 +103,70 @@ export default class Arena extends Phaser.Scene {
       .defineKey(1, "B8", "NUMPAD_NINE")
       .defineKey(1, "B9", "NUMPAD_ZERO");
 
-      // Set up collisions between players, pairwise
-      // for (let { fighter } of this.players){
-      //   fighter.body.setCollisionGroup(playerGroup)
-      // }
+    // Set up collisions between players, pairwise
+    // for (let { fighter } of this.players){
+    //   fighter.body.setCollisionGroup(playerGroup)
+    // }
 
-      function collision(fighter1, fighter2) {
-
-        if (fighter1.state === Stances.DASH && fighter2.state === Stances.IDLE) {
-          handleWin(fighter1, fighter2)
-        } else if (fighter1.state === Stances.DASH && fighter2.state === Stances.BALL) {
-          handleWin(fighter1, fighter2)
-        } else if (fighter1.state === Stances.DASH && fighter2.state === Stances.BLOCK) {
-          handleWin(fighter1, fighter2)
-        }  else if (fighter1.state === Stances.BLOCK && fighter2.state === Stances.BALL) {
-          handleWin(fighter1, fighter2)
-        } else if (fighter1.state === Stances.BLOCK && fighter2.state === Stances.DASH) {
-          handleWin(fighter1, fighter2)
-        } else if (fighter1.state === Stances.BLOCK && fighter2.state === Stances.IDLE) {
-          handleWin(fighter1, fighter2)
-        } else if (fighter1.state === Stances.BALL && fighter2.state === Stances.DASH) {
-          handleWin(fighter1, fighter2)
-        } else if (fighter1.state === Stances.BALL && fighter2.state === Stances.BLOCK) {
-          handleWin(fighter1, fighter2)
-        } else if (fighter1.state === Stances.BALL && fighter2.state === Stances.IDLE) {
-          handleWin(fighter1, fighter2)
-        }
-      
-        function handleWin (winner, loser) {
-          winner.score += 1
-          console.log(winner.score)
-          loser.setPosition(loser.spawn.x, loser.spawn.y)
-        }
-
-
+    function collision(fighter1, fighter2) {
+      if (fighter1.state === Stances.DASH && fighter2.state === Stances.IDLE) {
+        handleWin(fighter1, fighter2);
+      } else if (
+        fighter1.state === Stances.DASH &&
+        fighter2.state === Stances.BALL
+      ) {
+        handleWin(fighter1, fighter2);
+      } else if (
+        fighter1.state === Stances.DASH &&
+        fighter2.state === Stances.BLOCK
+      ) {
+        handleWin(fighter1, fighter2);
+      } else if (
+        fighter1.state === Stances.BLOCK &&
+        fighter2.state === Stances.BALL
+      ) {
+        handleWin(fighter1, fighter2);
+      } else if (
+        fighter1.state === Stances.BLOCK &&
+        fighter2.state === Stances.DASH
+      ) {
+        handleWin(fighter1, fighter2);
+      } else if (
+        fighter1.state === Stances.BLOCK &&
+        fighter2.state === Stances.IDLE
+      ) {
+        handleWin(fighter1, fighter2);
+      } else if (
+        fighter1.state === Stances.BALL &&
+        fighter2.state === Stances.DASH
+      ) {
+        handleWin(fighter1, fighter2);
+      } else if (
+        fighter1.state === Stances.BALL &&
+        fighter2.state === Stances.BLOCK
+      ) {
+        handleWin(fighter1, fighter2);
+      } else if (
+        fighter1.state === Stances.BALL &&
+        fighter2.state === Stances.IDLE
+      ) {
+        handleWin(fighter1, fighter2);
       }
 
+      function handleWin(winner, loser) {
+        winner.score += 1;
+        console.log(winner.score);
+        loser.setPosition(loser.spawn.x, loser.spawn.y);
+      }
+    }
 
-
-      for (let a of this.players) {
-        for (let b of this.players) {
-          if (a.index != b.index) {
-            this.physics.add.collider(a.fighter, b.fighter, collision);
-          }
+    for (let a of this.players) {
+      for (let b of this.players) {
+        if (a.index != b.index) {
+          this.physics.add.collider(a.fighter, b.fighter, collision);
         }
       }
+    }
 
     // Set up some debug text
 
@@ -153,11 +187,16 @@ export default class Arena extends Phaser.Scene {
       );
 
       const scoreTextSpace = 1000;
-      this.scoreTexts[i] = this.add.text(100 + (scoreTextSpace * i), 50, player.fighter.score, {
-        fontFamily: 'Arial',
-        fontSize: 44,
-        color: randomColor(),//'#00ff00'
-      });
+      this.scoreTexts[i] = this.add.text(
+        100 + scoreTextSpace * i,
+        50,
+        player.fighter.score,
+        {
+          fontFamily: "Arial",
+          fontSize: 44,
+          color: randomColor(), //'#00ff00'
+        }
+      );
 
       // Used for distinguishing different controller texts
       // while debugging
@@ -196,14 +235,12 @@ export default class Arena extends Phaser.Scene {
 
   update() {
     // Loop through player inputs
-  
-      this.players.forEach((player, i) => {
-        let { fighter } = player;
-        fighter.update(player);
-        this.scoreTexts[i].setText(player.fighter.score)
-      })
-      
-    
+
+    this.players.forEach((player, i) => {
+      let { fighter } = player;
+      fighter.update(player);
+      this.scoreTexts[i].setText(player.fighter.score);
+    });
 
     this.debugTexts.forEach((text, i) => {
       text.setText([
