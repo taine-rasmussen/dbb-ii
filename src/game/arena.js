@@ -1,6 +1,8 @@
 import MergedInput from "../main";
 import Fighter from "./Fighter";
 
+
+
 const Stances = {
   DASH: "DASH",
   BLOCK: "BLOCK",
@@ -9,6 +11,19 @@ const Stances = {
 }
 
 export default class Arena extends Phaser.Scene {
+
+  constructor()
+    {
+        super({ key: "Arena" })
+    }
+  init(data)
+    {
+        console.log('init', data)
+        this.mapData = data.mapData
+        this.tileData = data.tileData
+        this.backgroundData = data.backgroundData
+        this.numberOfPlayers = data.numberOfPlayers
+    }
   preload() {
     this.load.scenePlugin("mergedInput", MergedInput);
     this.load.multiatlas("gamepad", "assets/gamepad.json", "assets");
