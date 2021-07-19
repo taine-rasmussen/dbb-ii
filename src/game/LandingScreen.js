@@ -22,7 +22,6 @@ export default class LandingScreen extends Phaser.Scene {
         gradient.addColorStop(.5, '#ffffff');
         gradient.addColorStop(.5, '#aaaaaa');
         gradient.addColorStop(1, '#111111');
-    
         text.setFill(gradient);
     }
     update()    
