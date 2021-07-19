@@ -1,78 +1,110 @@
-import Dash from "./stances/Dash"
-import Block from "./stances/Block"
-import Ball from "./stances/Ball"
-import Reset from './stances/Reset'
-import Hop from './stances/Hop'
+import { Ball, Block, Dash, Idle, Hop } from "./stances/Stances";
 
-const LUBRICATION = 150;
+const DEFAULT_SPEED = 150;
+const PLAYER_DRAG_X = 800;
+const ARENA_WIDTH = 1280; // this should not be hard coded here!
+const ARENA_HEIGHT = 720; // neither should this!
+
+// milliseconds between dash use
+const DASH_COOLDOWN = 5000;
+
+const HOP_SPEED = 1e4;
+const DASH_SPEED = 800;
 
 const ControlScheme = Object.freeze({
-  // Flappy-bird-esque jumping
-  HOP: "B0",
-  DASH: "B5",
-  BLOCK: "B4",
-  BALL: "B2",
-  dir: 'AIM'
-})
+  HOP: "B1",
+  DASH: "B8",
+  BLOCK: "B5",
+  BALL: "B3",
+  dir: "AIM",
+});
 
 export const Stances = Object.freeze({
   DASH: "DASH",
   BLOCK: "BLOCK",
   BALL: "BALL",
-  BASE: 'BASE'
+  IDLE: "IDLE",
+  JUMPED: "JUMPED",
 });
 
 export default class Fighter extends Phaser.GameObjects.Sprite {
   constructor(arena, x, y, controlScheme = ControlScheme) {
-    super(arena, x, y)
-    this.sprite = "player"
+    // do what a sprite does with a scene,
+    // except here we called it 'arena' instead.
+    super(arena, x, y);
+
+    // Ensure correct sprite size
     this.setScale(0.1);
-    this.setTexture(this.sprite)
-    this.setPosition(x, y)
-    this.controlScheme = controlScheme
-    this.canJump = true;
+
+    // Initialize fighter with default stance
+    this.setStance(Stances.IDLE);
+
+    // TODO: Get x, y values from tiled map
+    this.setPosition(x, y);
+
+    this.controlScheme = controlScheme;
   }
 
   update(input) {
-    let {direction, buttons, gamepad } = input;
-    let { UP, DOWN, LEFT, RIGHT} = direction;
-    let joystickX = RIGHT - LEFT;
-    let joystickY = DOWN - UP;
-    this.body.velocity.x = joystickX * LUBRICATION;
-    this.body.setDrag(800, 0)
+    // Default physics properties
+    this.body.setDrag(PLAYER_DRAG_X, 0);
 
+    // Get inputs (this frame)
+    let { direction, buttons } = input;
+    let { UP, DOWN, LEFT, RIGHT } = direction;
+
+    // Get movement direction from left stick
+    let dx = Number(RIGHT) - Number(LEFT);
+    let dy = Number(DOWN) - Number(UP);
+    let angle = Math.atan2(dy, dx);
+
+    // Handle button presses
     let { HOP, BALL, BLOCK, DASH } = this.controlScheme;
-    let angle = Math.atan2(joystickY, joystickX);
-    // let angle = input.gamepad.leftStick.angle() || "Doesn't exist!"
-    console.log(Object.keys(input))
-
     if (buttons[HOP]) {
-      Hop.bind(this)(angle, joystickX, joystickY)
-    } else if  (buttons[BALL]) {
-      this.body.setCircle((this.width / 2) - 40)
-      Ball.bind(this)(angle, joystickX, joystickY);
+      Hop(this, dx * DEFAULT_SPEED, dy * HOP_SPEED);
+    } else if (buttons[BALL]) {
+      Ball(this, dx * DEFAULT_SPEED);
     } else if (buttons[BLOCK]) {
-      Block.bind(this)(angle, joystickX, joystickY);
+      Block(this);
+      this.body.stop();
     } else if (buttons[DASH]) {
-      Dash.bind(this)(angle, joystickX, joystickY);
-      setTimeout(() => Reset.call(this), 1000)
+      Dash(this, dx * DASH_SPEED, dy * DASH_SPEED);
     } else {
-      Reset.bind(this)(joystickX, LUBRICATION, input.gamepad.leftStick)
+      Idle(this, dx * DEFAULT_SPEED);
     }
-    
-    if (this.y > 720) {
-      this.y = -32
+
+    // All stance sprites face the direction
+    // of the left thumbstick
+    // this.updateHitbox();
+    this.setRotation(angle);
+
+    // When you get to the arena edge,
+    // wrap back around.
+    this.y = modulo(this.y, ARENA_HEIGHT);
+    this.x = modulo(this.x, ARENA_WIDTH);
+  }
+
+  setStance(stanceName) {
+    if (!Object.values(Stances).includes(stanceName)) {
+      throw new Error(`Stance ${stanceName} must be a defined stance.`);
     }
-    if (this.y < -32) {
-      this.y = 730
-    }
-    
-    if (this.x < 0) {
-      this.x = 1279
-    }
-    if (this.x > 1284) {
-      this.x = 1
-    }
+    this.state = stanceName;
+    this.setTexture(stanceName);
+  }
+
+  // updateHitbox updates the fighter's
+  // hitbox based on its sprite width
+  updateHitbox() {
+    // Change the hitbox to a circle
+    const halfWidth = this.width / 2;
+    const shrinkHitboxByAmount = 40;
+    const hitBoxRadius = halfWidth - shrinkHitboxByAmount;
+    this.body.setCircle(hitBoxRadius);
   }
 }
 
+// *** HELPERS ***
+
+function modulo(k, n) {
+  return (n + (k % n)) % n;
+}
