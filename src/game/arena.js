@@ -1,11 +1,20 @@
 import MergedInput from "../main";
 import Fighter from './Fighter'
 export default class Arena extends Phaser.Scene {
+    constructor()
+    {
+        super({ key: "Arena" })
+    }
 
+    init({ map, players })
+    {
+        this.mapData = map
+        this.numberOfPlayers = players
+    }
 
     preload() {
         this.load.scenePlugin('mergedInput', MergedInput);
-		this.load.multiatlas('gamepad', 'assets/gamepad.json', 'assets');
+		// this.load.multiatlas('gamepad', 'assets/gamepad.json', 'assets');
         this.load.image('player', 'assets/Player.png')
         this.load.image('block', 'assets/Block.png')
         this.load.image('dash', 'assets/Dash.png')
@@ -13,12 +22,16 @@ export default class Arena extends Phaser.Scene {
 
         //Setup for loading the base tilemap and required tile images
         this.load.image('base_tiles', 'assets/triangle.png')
-        this.load.tilemapTiledJSON('tilemap', `assets/${this.mapData}`)
-
-        // this.load.image('crab', 'assets/crab.png')
+        this.load.tilemapTiledJSON('tilemap', `assets/tiler-initial-prac.json`)
     }
 
     create() {
+
+        // this.input.once('pointerdown', function (event) {
+
+        //     this.scene.start('LandingScreen');
+
+        // }, this);
 
         //Setup for loading the base tilemap and required tile images
         const map = this.make.tilemap({ key: 'tilemap' })
@@ -36,18 +49,8 @@ export default class Arena extends Phaser.Scene {
 
         this.physics.world.setBounds(0, 0, 1280, 720)
         
-        // create the player sprite    
-        // var crab = this.physics.add.sprite(200, 200, 'crab'); 
-        // crab.setBounce(0.5); // our crab will bounce from items
-        // crab.setCollideWorldBounds(true); // do
-        // crab.setScale(0.3)
-        
-        
-        // crab.body.setSize(crab.width, crab.height-8);
-        
         middleLayer.setCollisionByProperty({ collides: true });
-        // this.physics.add.collider(middleLayer, crab);
-        
+
         middleLayer.setCollisionByExclusion([-1]);
         
 
@@ -101,7 +104,7 @@ export default class Arena extends Phaser.Scene {
             ;
 
         // Set up some debug text
-
+        console.log(this.players)
         this.playerTexts = []
 
         this.players.forEach((_, i) => {
@@ -141,40 +144,10 @@ export default class Arena extends Phaser.Scene {
 
         // Loop through player inputs
         for (let thisPlayer of this.mergedInput.players) {
-
             let { fighter } = thisPlayer;
+            if (typeof fighter !== "undefined"){
             fighter.update(thisPlayer)
-            
-            // Show dpad frame for direction input. (Diagonal input is supported, but can't easily be shown with these sprites)
-            // if (thisPlayer.direction.UP > 0) {
-            //     fighter.y -= PLAYER_SPEED;
-            // }
-            // if (thisPlayer.direction.RIGHT > 0) {
-            //     fighter.x += PLAYER_SPEED;
-            // }
-            // if (thisPlayer.direction.DOWN > 0) {
-            //     fighter.y += PLAYER_SPEED;
-            // }
-            // if (thisPlayer.direction.LEFT > 0) {
-            //     fighter.x -= PLAYER_SPEED;
-            // }
-
-            for (let thisButton in thisPlayer.buttons) {
-                // do player actions
-                // (shape cycling etc.)
             }
         }
-
-        // this.playerTexts.forEach((text, i) => {
-        //     text.setText([
-        //         `Player ${i + 1}', 'Gamepad: ` + (typeof this.mergedInput.getPlayer(i).gamepad.index === 'undefined' ? 'Press a button to connect' : this.mergedInput.getPlayer(i).gamepad.id),
-        //         'Directions: ' + JSON.stringify(this.mergedInput.getPlayer(i).direction),
-        //         'Buttons: ' + JSON.stringify(this.mergedInput.getPlayer(i).buttons),
-        //         'Interaction: ' + JSON.stringify(this.mergedInput.getPlayer(i).interaction)
-        //     ])
-        // })
-
-        // this.player2Text.setText(JSON.stringify(this.mergedInput.debug().players, null, "\t"));
-
     }
 }

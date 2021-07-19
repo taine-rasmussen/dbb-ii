@@ -1,14 +1,5 @@
 import Arena from './arena.js';
-
-function DefineArena(mapData, numberOfPlayers) {
-    class CustomArena extends Arena {
-        init() {
-            this.mapData = mapData;
-            this.numberOfPlayers = numberOfPlayers;
-        }
-    }
-    return CustomArena
-}
+import LandingScreen from './LandingScreen.js'
 
 const config = {
     parent: 'monitor',
@@ -26,8 +17,10 @@ const config = {
         }
     },
     scene: [
-       DefineArena("tiler-initial-prac.json", 3)
+        LandingScreen,
+        Arena
     ]
+    
 };
 
 const game = new Phaser.Game(config);

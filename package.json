@@ -32,5 +32,8 @@
     "uglifyjs-webpack-plugin": "^2.1.3",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1"
+  },
+  "dependencies": {
+    "phaser-plugin-update": "^2.1.0"
   }
 }
