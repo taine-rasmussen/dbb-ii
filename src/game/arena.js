@@ -1,5 +1,12 @@
 import MergedInput from "../main";
-import Fighter, { Stances } from "./Fighter";
+import Fighter from "./Fighter";
+
+const Stances = {
+  DASH: "DASH",
+  BLOCK: "BLOCK",
+  BALL: "BALL",
+  IDLE: "IDLE",
+}
 
 export default class Arena extends Phaser.Scene {
   preload() {

@@ -1,4 +1,10 @@
-import { Stances } from "../fighter";
+// import { Stances } from "../Fighter";
+const Stances = {
+  DASH: "DASH",
+  BLOCK: "BLOCK",
+  BALL: "BALL",
+  IDLE: "IDLE",
+}
 
 const IDLE_WIDTH = 605;
 const IDLE_HEIGHT = 580;
