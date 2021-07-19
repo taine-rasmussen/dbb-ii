@@ -1,13 +1,20 @@
-function Hop(stick, accelerationX, accelerationY, LUBRICATION) {
-  if (this.state === "base") {
-    this.setRotation(stick.angle());
-    this.body.setMaxSpeed(800);
-    this.body.setDrag(0, 0)
+import { Stances } from "../fighter";
 
-    this.body.setVelocityY(stick.y * 10000)
-    this.body.setVelocityX(stick.x * 10000);
-    console.log("X: ", this.body.velocity.x);
-    this.setState("jumped");
+const HOP_SPEED = 10000;
+const HOPPER_MAX_SPEED = 800;
+
+function Hop(_, x, y) {
+  if (this.state == Stances.IDLE) {
+    this.body.setMaxSpeed(HOPPER_MAX_SPEED);
+    this.body.setDrag(0, 0);
+
+    // The hopping movement itself
+    this.body.setVelocityY(y * HOP_SPEED);
+    this.body.setVelocityX(x * HOP_SPEED);
+
+    // This is not really a stance,
+    // Junp cooldowns should be implemented differently.
+    this.setStance(Stances.JUMPED);
   }
 }
 

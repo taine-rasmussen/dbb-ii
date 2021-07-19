@@ -1,11 +1,12 @@
-function Dash(stick) {
-    this.body.setMaxSpeed(800)
-    this.setTexture("dash");
-    this.body.moves = true
-    console.log(stick)
-    this.setRotation(stick.angle())
-    this.body.setVelocityX(stick.x * 800)
-    this.body.setVelocityY(stick.y * 800)
+const DASH_SPEED = 800;
+
+function Dash(angle, x, y) {
+  this.setStance(Stances.DASH);
+  this.body.moves = true;
+  this.setRotation(angle);
+  this.body.setVelocityX(x * DASH_SPEED);
+  this.body.setVelocityY(y * DASH_SPEED);
+  this.body.setMaxSpeed(DASH_SPEED);
 }
 
 export default Dash;
