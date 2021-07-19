@@ -57,19 +57,21 @@ export default class Arena extends Phaser.Scene {
     );
 
 
-    // [115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250] Inital 4 spawns
+   
 
 // *** Random player spawns ***
-    let spawnPoints = [[115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250]]
+    let map1Spawns = [[100, 100], [1000, 100], [650, 200], [300, 400], [1000, 400]]
+    
+    let map2Spawns = [[115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250]]
         console.log('Current number of players is:', this.players.length)
 
     let playerGroup = this.add.group();
     var randomSpawn = [];
 
     for (var i = 0; i < this.players.length; i++) {
-        var n = Math.floor(Math.random() * spawnPoints.length);
-        randomSpawn.push(spawnPoints[n]);
-        spawnPoints.splice(n, 1);
+        var n = Math.floor(Math.random() * map2Spawns.length);
+        randomSpawn.push(map2Spawns[n]);
+        map2Spawns.splice(n, 1);
     }       
 
     this.players.forEach((player, i) => {
