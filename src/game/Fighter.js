@@ -4,6 +4,7 @@ import Ball from "./stances/Ball"
 import Reset from './stances/Reset'
 import Hop from './stances/Hop'
 
+
 const LUBRICATION = 150;
 
 const ControlScheme = Object.freeze({
@@ -30,25 +31,26 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     this.controlScheme = controlScheme
   }
 
-  update(input) {
+  update(input, all) {
     let {direction, buttons, gamepad} = input;
     let { UP, DOWN, LEFT, RIGHT} = direction;
     let accelerationX = RIGHT - LEFT;
     this.body.velocity.x = accelerationX * LUBRICATION;
     this.body.setDrag(800, 0)
-    
+
     if (buttons[this.controlScheme.ACTION_FLAP]) {
-      console.log(input)
-      Hop.bind(this)(gamepad.leftStick || { x: 0, y: 0 })
+      // console.log(input)
+      // console.log(all)
+      Hop.bind(this)(gamepad.leftStick)
     } else if  (buttons[this.controlScheme.STANCE_BALL]) {
       this.body.setCircle((this.width / 2) - 40)
-      Ball.bind(this)(gamepad.leftStick || { x: 0, y: 0 });
+      Ball.bind(this)(gamepad.leftStick);
     } else if (buttons[this.controlScheme.STANCE_BLOCK]) {
-      Block.bind(this)(gamepad.leftStick || { x: 0, y: 0 });
+      Block.bind(this)(gamepad.leftStick);
     } else if (buttons[this.controlScheme.STANCE_DASH]) {
-      Dash.bind(this)(gamepad.leftStick || { x: 0, y: 0 }, input);
+      Dash.bind(this)(gamepad.leftStick, input);
     } else {
-      Reset.bind(this)(accelerationX, LUBRICATION, input.gamepad.leftStick || { x: 0, y: 0 })
+      Reset.bind(this)(accelerationX, LUBRICATION, input.gamepad.leftStick)
     }
     
     if (this.y > 720) {

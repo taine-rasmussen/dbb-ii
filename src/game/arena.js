@@ -1,5 +1,6 @@
 import MergedInput from "../main";
 import Fighter from './Fighter'
+import collision from "./collision"
 export default class Arena extends Phaser.Scene {
 
 
@@ -35,24 +36,23 @@ create() {
   middleLayer.setCollisionByExclusion([-1]);
   
   // Set up player objects
-  // this.players = Array.from(new Array(this.numberOfPlayers)).map((_, i) => this.mergedInput.addPlayer(i))
   this.player1 = this.mergedInput.addPlayer(1)
   this.player2 = this.mergedInput.addPlayer(2)
-  this.player3 = this.mergedInput.addPlayer(3)
-  this.player4 = this.mergedInput.addPlayer(4)
-
+  
+  var dudes = this.add.group()
   const start = [[400, 400], [800, 400], [500, 300], [400, 100]]
-
+  
   this.mergedInput.players.forEach((player, i) => {
     player.fighter = new Fighter(this, start[i][0], start[i][1]);
     this.add.existing(player.fighter);
     this.physics.add.existing(player.fighter, false);
     this.physics.add.collider(middleLayer, player.fighter);
+    dudes.add(player.fighter)
     this.mergedInput
-    .defineKey(i, 'UP', 'W')
-    .defineKey(i, 'DOWN', 'S')
-    .defineKey(i, 'LEFT', 'A')
-    .defineKey(i, 'RIGHT', 'D')
+    .defineKey(1, 'UP', 'W')
+    .defineKey(1, 'DOWN', 'S')
+    .defineKey(1, 'LEFT', 'A')
+    .defineKey(1, 'RIGHT', 'D')
     .defineKey(i, 'Bi', 'ONE')
     .defineKey(i, 'B1', 'TWO')
     .defineKey(i, 'B2', 'THREE')
@@ -63,18 +63,21 @@ create() {
     .defineKey(i, 'B7', 'EIGHT')
     .defineKey(i, 'B8', 'NINE')
     .defineKey(i, 'B9', 'ZERO')
-    })
+  })
 
+  
+  this.physics.add.collider(this.player1.fighter, this.player2.fighter, collision)
+  console.log(this.mergedInput)
   // Set up some debug text
-
+  
   this.playerTexts = []
-
+  
   this.mergedInput.players.forEach((_, i) => {
     const spaceBetween = 50;
     this.playerTexts[i] = this.add.text(50 + i * spaceBetween, 500 + i * spaceBetween, '', {
-        fontFamily: 'Arial',
-        fontSize: 14,
-        color: randomColor(),//'#00ff00'
+      fontFamily: 'Arial',
+      fontSize: 14,
+      color: randomColor(),//'#00ff00'
     });
 
     // Used for distinguishing different controller texts
@@ -106,12 +109,8 @@ update() {
   // Loop through player inputs
   for (let thisPlayer of this.mergedInput.players) {
     // console.log(thisPlayer)
-    // let { fighter } = thisPlayer;
-    // fighter.update(thisPlayer)
-    this.player1.fighter.update(thisPlayer)
-    this.player2.fighter.update(thisPlayer)
-    this.player3.fighter.update(thisPlayer)
-    this.player4.fighter.update(thisPlayer)
+    let { fighter } = thisPlayer;
+    fighter.update(thisPlayer, this.mergedInput.players)
       
     for (let thisButton in thisPlayer.buttons) {
     }
