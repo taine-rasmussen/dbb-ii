@@ -53,32 +53,41 @@ export default class Arena extends Phaser.Scene {
 
 
 
+
+// **** Random spawn testing ****
         // Spawn locations
             // Top left === 100, 100
             // Top right === 1000, 100
             // Middle === 650, 200
-            // Bottom left === 400, 400
+            // Bottom left === 300, 400
             // Bottom right === 1000, 400
 
-        // Array of random spawn cords
-        let spawnCords = [[100, 100], [1000, 100], [650, 200], [400, 400], [1000, 400]]
+        // Array of possible spawn cords on default map
+        let spawnPoints = [[100, 100], [1000, 100], [650, 200], [300, 400], [1000, 400]]
+            console.log('Current number of players is:', this.players.length)
 
-        // Gets random spawn cords and returns array of both X & Y cords
-         const setSpawn = () => {
-            let randomSpawn = spawnCords[Math.floor(Math.random() * spawnCords.length)];
-            return randomSpawn 
-        } 
-
-        // Still possible for double up spawn - how to remove cords from array once used??
+        var randomSpawn = []; // Set new array
+        
+        // Gets random set of cords from spawnPoints array based on number of players in the game
+        for (var i = 0; i < this.players.length; i++) {
+          var n = Math.floor(Math.random() * spawnPoints.length);
+          randomSpawn.push(spawnPoints[n]);
+          spawnPoints.splice(n, 1);
+        }       
+        
+        console.log('Results from spliced array:', randomSpawn)
+             
+        // Set rules for each player
         this.players.forEach((player, i) => {     
-            let spawnCord = setSpawn()
-            console.log(spawnCord)
-            player.fighter = new Fighter(this, spawnCord[0], spawnCord[1]) 
+            
+            console.log('Player spawned at:', randomSpawn[i][0], randomSpawn[i][1])
+            player.fighter = new Fighter(this, randomSpawn[i][0], randomSpawn[i][1]) 
+
             this.add.existing(player.fighter);
             this.physics.add.existing(player.fighter, false);
             this.physics.add.collider(middleLayer, player.fighter);    
         });
-
+// **** Random spawn testing ****       
 
 
         // Define keys (player, action, key, append)
@@ -191,6 +200,10 @@ export default class Arena extends Phaser.Scene {
         // })
 
         // this.player2Text.setText(JSON.stringify(this.mergedInput.debug().players, null, "\t"));
+
+
+
+        
 
     }
 }
