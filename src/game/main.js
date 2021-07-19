@@ -1,23 +1,5 @@
 import Arena from "./arena.js";
-
-function DefineArena(mapData, tileData, backgroundData, numberOfPlayers) {
-  class CustomArena extends Arena {
-    init() {
-      this.mapData = mapData;
-      this.numberOfPlayers = numberOfPlayers;
-      this.tileData = tileData;
-      this.backgroundData = backgroundData;
-    }
-  }
-  return CustomArena;
-}
-
-const SunArena = DefineArena(
-  "sun_map.json",
-  "gridtiles.png",
-  "sun_background.png",
-  4
-);
+import LandingScreen from './LandingScreen.js'
 
 const config = {
   parent: "monitor",
@@ -34,7 +16,11 @@ const config = {
       debug: false,
     },
   },
-  scene: SunArena,
+  scene: [
+      LandingScreen,
+      Arena
+  ]
+
 };
 
 const game = new Phaser.Game(config);
