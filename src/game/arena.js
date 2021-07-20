@@ -135,7 +135,7 @@ export default class Arena extends Phaser.Scene {
       player.fighter = new Fighter(this, x, y)
       this.add.existing(player.fighter)
       this.physics.add.existing(player.fighter, false)
-      this.physics.add.collider(middleLayer, player.fighter, () => this.audio.play('keys'))
+      this.physics.add.collider(middleLayer, player.fighter)
       player.fighter.score = 0
       player.index = i
       playerGroup.add(player.fighter)
