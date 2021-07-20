@@ -19,11 +19,12 @@ const HOPPER_MAX_SPEED = 800
 const NO_BOUNCE = 0
 const NO_DRAG = [0, 0]
 const DASH_MAX_SPEED = 800
+const DASH_GRAVITY = 50
 const HOP_MAX_SPEED = 500
 const EMIT_TRAIL = true
 const PAUSE_TRAIL = false
 
-function Stance(name, canMove, bounce, dragVector, maxSpeed, canEmit) {
+function Stance(name, canMove, bounce, dragVector, maxSpeed, canEmit, gravity) {
   return function stanceUpdater(sprite, vx, vy) {
     sprite.setStance(name)
 
@@ -33,6 +34,7 @@ function Stance(name, canMove, bounce, dragVector, maxSpeed, canEmit) {
     body.setDrag(dragVector[0], dragVector[1])
     body.setMaxSpeed(maxSpeed)
     sprite.trail.active = canEmit
+    // body.gravity.y(gravity)
    
     // if block stance, freeze in place
     if (sprite.state === Stances.BLOCK) {
@@ -78,7 +80,7 @@ export const Ball = Stance(
 // Block
 export const Block = Stance(
   Stances.BLOCK,
-  true, // Block can't move
+  false, //block can't move
   NO_BOUNCE,
   NO_DRAG,
   0,
@@ -92,5 +94,6 @@ export const Dash = Stance(
   NO_BOUNCE,
   NO_DRAG,
   DASH_MAX_SPEED,
-  EMIT_TRAIL
+  EMIT_TRAIL,
+  DASH_GRAVITY
 )

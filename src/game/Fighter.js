@@ -11,13 +11,14 @@ const DASH_COOLDOWN = 5000
 const HOP_SPEED = 1e3
 const DASH_SPEED = 800
 
-const ControlScheme = Object.freeze({
+let ControlScheme = {
   HOP: "B0",
   DASH: "B5",
   BLOCK: "B4",
   BALL: "B2",
   dir: "AIM",
-})
+}
+
 
 export const Stances = Object.freeze({
   DASH: "DASH",
@@ -44,7 +45,11 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     // TODO: Get x, y values from tiled map
     this.setPosition(x, y)
 
-    this.controlScheme = controlScheme
+    // copy control scheme from defaults
+    this.controlScheme = {}
+    for(let [ key, value ] of Object.entries(ControlScheme)) {
+      this.controlScheme[key] = value;
+    }
     this.mass = 50
   }
 
@@ -74,10 +79,11 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     } else if (buttons[BLOCK]) {
       Block(this)
       this.body.stop()
-    } else if (buttons[DASH]) {
-      if (this.state === Stances.IDLE) {
+    } else if (buttons[DASH] && dx + dy) {
+      // if (this.state === Stances.IDLE) {
         Dash(this, dx * DASH_SPEED, dy * DASH_SPEED)
-      }
+        this.dashCooldown(this)
+      // }
     } else {
       this.body.setAllowGravity(true)
       if (this.state === Stances.DASH) {
@@ -92,7 +98,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     const boat = {
       id: 1
     }
-    console.log(boat.id)
+    // console.log(boat.id)
     // All stance sprites face the direction
     // of the left thumbstick
     // this.updateHitbox()
@@ -123,6 +129,13 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     const shrinkHitboxByAmount = 40
     const hitBoxRadius = halfWidth - shrinkHitboxByAmount
     this.body.setCircle(hitBoxRadius)
+  }
+
+  dashCooldown(player) {
+    player.controlScheme.DASH = "B7"
+    setTimeout(() => {
+      player.controlScheme.DASH = "B5"
+    }, 500)
   }
 }
 
