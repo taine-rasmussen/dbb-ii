@@ -45,7 +45,7 @@ export default class Arena extends Phaser.Scene {
     const map = this.make.tilemap({ key: "tilemap" })
 
     const backgroundTileset = map.addTilesetImage(
-      "sun_background",
+      "background",
       "background_tiles"
     )
     const backgroundLayer = map.createLayer(
@@ -109,12 +109,10 @@ export default class Arena extends Phaser.Scene {
       player.fighter.trail.reserve(1000)
       // create player backlight
       let [r, g, b] = this.playerColors[i]
-      console.log(r)
       player.fighter.glow = this.add.pointlight(x, y, 0, 75, 0.2, 0.05)
       player.fighter.glow.color.r = r
       player.fighter.glow.color.g = g
       player.fighter.glow.color.b = b
-      console.log(player.fighter.glow)
     })
     
     // Define keys (player, action, key, append)
@@ -201,7 +199,6 @@ export default class Arena extends Phaser.Scene {
 
       function handleWin(winner, loser) {
         winner.score += 1
-        console.log(winner.score)
         loser.setPosition(loser.spawn.x, loser.spawn.y)
       }
     }
@@ -224,7 +221,7 @@ export default class Arena extends Phaser.Scene {
       let g = this.playerColors[i][1]
       let b = this.playerColors[i][2]
 
-      const scoreTextSpace = 1000
+      const scoreTextSpace = 300
       this.scoreTexts[i] = this.add.text(
         100 + scoreTextSpace * i,
         50,
