@@ -43,6 +43,23 @@ export default class Arena extends Phaser.Scene {
     backgroundLayer.setScale(0.8);
     middleLayer.setScale(0.8);
 
+
+// **** Fullscreen testing ****
+    var button = this.add.image(1000-16, 16, Stances.BLOCK, 500).setOrigin(1, 0).setInteractive();
+            button.on('pointerup', function () {
+
+                if (this.scale.isFullscreen) {
+                    button.setFrame(0);
+                    this.scale.stopFullscreen();
+                } else {
+                    button.setFrame(1);
+                    this.scale.startFullscreen();
+                }
+            }, this);
+// **** Fullscreen testing ****
+
+
+
     //smooth out fps
     // this.physics.world.syncToRender = true;
     this.physics.world.fixedStep = false;
