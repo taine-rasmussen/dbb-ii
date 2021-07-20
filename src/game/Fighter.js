@@ -74,14 +74,14 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
         this.state = "JUMPED";
       }
     } else if (buttons[BALL]) {
-      this.sound.play('battery', { volume: 0.8 })
+      if (!this.scene.sound.isPlaying) this.scene.sound.play('battery', { volume: 0.8 })
       Ball(this, { ax: dx * BALL_SPEED, ay: BALL_SPEED / 3 });
     } else if (buttons[BLOCK]) {
-      this.sound.play('stop', { volume: 0.8 })
+      if (!this.scene.sound.isPlaying) this.scene.sound.play('stop', { volume: 0.8 })
       Block(this, { vx: 0, vy: 0 });
       this.body.stop();
     } else if (buttons[DASH] && dx + dy) {
-      this.scene.sound.play('blaster', { volume: 0.8 })
+      if (!this.scene.sound.isPlaying) this.scene.sound.play('blaster', { volume: 0.8 })
       Dash(this, { vx: dx * DASH_SPEED, vy: dy * DASH_SPEED });
       this.dashCooldown(this);
     } else {
