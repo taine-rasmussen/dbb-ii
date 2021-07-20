@@ -45,7 +45,6 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     this.setPosition(x, y)
 
     this.controlScheme = controlScheme
-    this.mass = 50
   }
 
   update(input) {
@@ -68,9 +67,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     let { HOP, BALL, BLOCK, DASH } = this.controlScheme
     
     if (buttons[HOP]) {
-      console.log(LEFT)
       if (this.state === Stances.IDLE) {
-        this.anims.stop()
         Hop(this, dx * HOP_SPEED, dy * HOP_SPEED)
         this.state = 'JUMPED'
       }
@@ -91,10 +88,6 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
           return
         }, 500)
       } else {
-        if (this.state === Stances.IDLE && LEFT > 0) {
-          console.log('lefting')
-          this.anims.play('left')
-        }
         Idle(this, dx * DEFAULT_SPEED)
       }
     }
@@ -105,6 +98,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     // this.setRotation(angle)
     // When you get to the arena edge,
     // wrap back around.
+    if (this.state !== Stances.DASH) this.setFlipX(LEFT > 0)
     this.y = modulo(this.y, ARENA_HEIGHT)
     this.x = modulo(this.x, ARENA_WIDTH)
     
@@ -112,13 +106,12 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     this.glow.setPosition(this.x, this.y)
   }
 
-
   setStance(stanceName) {
     if (!Object.values(Stances).includes(stanceName)) {
       throw new Error(`Stance ${stanceName} must be a defined stance.`)
     }
     this.state = stanceName
-    this.setTexture(stanceName)
+    // this.setTexture(stanceName)
   }
 
   // updateHitbox updates the fighter's
