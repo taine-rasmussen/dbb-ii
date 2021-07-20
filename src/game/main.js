@@ -1,6 +1,6 @@
 import Arena from "./scenes/arena.js";
 import LandingScreen from './scenes/LandingScreen.js'
-
+import EndGameScreen from './scenes/EndGameScreen.js'
 const config = {
   parent: "monitor",
   type: Phaser.AUTO,
@@ -18,7 +18,8 @@ const config = {
   },
   scene: [
       LandingScreen,
-      Arena
+      Arena,
+      EndGameScreen
   ]
 
 };

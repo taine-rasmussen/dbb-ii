@@ -92,7 +92,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     const boat = {
       id: 1
     }
-    console.log(boat.id)
+    // console.log(boat.id)
     // All stance sprites face the direction
     // of the left thumbstick
     // this.updateHitbox()

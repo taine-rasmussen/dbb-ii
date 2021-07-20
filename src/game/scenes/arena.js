@@ -17,7 +17,7 @@ export default class Arena extends Phaser.Scene {
     }
   init(data)
     {
-        console.log('init', data)
+        // console.log('init', data)
         this.mapData = data.mapData
         this.tileData = data.tileData
         this.backgroundData = data.backgroundData
@@ -91,7 +91,7 @@ export default class Arena extends Phaser.Scene {
       this.add.existing(player.fighter)
       this.physics.add.existing(player.fighter, false)
       this.physics.add.collider(middleLayer, player.fighter)
-      player.fighter.score = 0
+      player.fighter.score = 10
       player.index = i
       playerGroup.add(player.fighter)
       // create trail for players
@@ -107,12 +107,10 @@ export default class Arena extends Phaser.Scene {
       player.fighter.trail.reserve(1000)
       // create player backlight
       let [r, g, b] = this.playerColors[i]
-      console.log(r)
       player.fighter.glow = this.add.pointlight(x, y, 0, 75, 0.2, 0.05)
       player.fighter.glow.color.r = r
       player.fighter.glow.color.g = g
       player.fighter.glow.color.b = b
-      console.log(player.fighter.glow)
     })
     
     // Define keys (player, action, key, append)
@@ -199,7 +197,6 @@ export default class Arena extends Phaser.Scene {
 
       function handleWin(winner, loser) {
         winner.score += 1
-        console.log(winner.score)
         loser.setPosition(loser.spawn.x, loser.spawn.y)
       }
     }
@@ -254,13 +251,18 @@ export default class Arena extends Phaser.Scene {
       let { fighter } = player;
       fighter.update(player);
       this.scoreTexts[i].setText(player.fighter.score);
-      console.log(this.scoreTexts[i])
+      // console.log(this.scoreTexts[i])
     });
     let scoreArr = []
     this.players.forEach((player) => {
         if (player.fighter.score === 11){
-          scoreArr.push(player.fighter.score)
-            this.scene.start('EndGameScreen', {scores: scoreArr})
+          this.players.map((pl) => {
+            scoreArr.push({
+              id: pl.index + 1,
+              score: pl.fighter.score
+            })
+          })
+          this.scene.start('EndGameScreen', {scores: scoreArr})
         }
     })
 
