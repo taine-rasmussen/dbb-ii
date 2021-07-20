@@ -1,4 +1,4 @@
-import { Ball, Block, Dash, Idle, Hop } from "./stances/Stances";
+import { Ball, Block, Dash, Idle, Hop } from "./assets/stances/Stances";
 
 const DEFAULT_SPEED = 250;
 const BALL_SPEED = 500;
@@ -79,7 +79,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
       Block(this, { vx: 0, vy: 0 });
       this.body.stop();
     } else if (buttons[DASH] && dx + dy) {
-      this.sound.play('blaster', { volume: 0.8 })
+      this.scene.sound.play('blaster', { volume: 0.8 })
       Dash(this, { vx: dx * DASH_SPEED, vy: dy * DASH_SPEED });
       this.dashCooldown(this);
     } else {

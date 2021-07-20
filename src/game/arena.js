@@ -48,8 +48,6 @@ export default class Arena extends Phaser.Scene {
       this.load.audio('keys', 'assets/keys.wav')
     }
 
-  }
-
   create() {
     //Setup for loading the base tilemap and required tile images
     const map = this.make.tilemap({ key: "tilemap" })
@@ -102,7 +100,7 @@ export default class Arena extends Phaser.Scene {
       player.fighter = new Fighter(this, x, y)
       this.add.existing(player.fighter)
       this.physics.add.existing(player.fighter, false)
-      this.physics.add.collider(middleLayer, player.fighter, this.sound.play('numkey', { volume: 0.8 }))
+      this.physics.add.collider(middleLayer, player.fighter, () => this.sound.play('keys', { volume: 0.8 }))
       player.fighter.score = 0
       player.index = i
       playerGroup.add(player.fighter)
