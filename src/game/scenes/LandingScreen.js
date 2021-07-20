@@ -1,4 +1,4 @@
-import MergedInput from '../main.js'
+import MergedInput from '../../main.js'
 export default class LandingScreen extends Phaser.Scene {
 
     

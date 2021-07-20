@@ -1,7 +1,5 @@
-import MergedInput from "../main";
-import Fighter from "./Fighter";
-
-
+import MergedInput from "../../main";
+import Fighter from "../Fighter";
 
 const Stances = {
   DASH: "DASH",
@@ -243,7 +241,15 @@ export default class Arena extends Phaser.Scene {
       let { fighter } = player;
       fighter.update(player);
       this.scoreTexts[i].setText(player.fighter.score);
+      console.log(this.scoreTexts[i])
     });
+    let scoreArr = []
+    this.players.forEach((player) => {
+        if (player.fighter.score === 11){
+          scoreArr.push(player.fighter.score)
+            this.scene.start('EndGameScreen', {scores: scoreArr})
+        }
+    })
 
     // this.debugTexts.forEach((text, i) => {
     //   text.setText([

@@ -1,5 +1,5 @@
-import Arena from "./arena.js";
-import LandingScreen from './LandingScreen.js'
+import Arena from "./scenes/arena.js";
+import LandingScreen from './scenes/LandingScreen.js'
 
 const config = {
   parent: "monitor",
