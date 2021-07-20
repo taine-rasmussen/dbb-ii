@@ -51,21 +51,26 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
   update(input) {
     // Default physics properties
     this.body.setDrag(PLAYER_DRAG_X, 0)
-
+    
     // Get inputs (this frame)
     let { direction, buttons } = input
     let { UP, DOWN, LEFT, RIGHT } = direction
-
+    
     // Get movement direction from left stick
     let dx = Number(RIGHT) - Number(LEFT)
     let dy = Number(DOWN) - Number(UP)
     let angle = Math.atan2(dy, dx)
     
+    // Animations
+    
+
     // Handle button presses
     let { HOP, BALL, BLOCK, DASH } = this.controlScheme
     
     if (buttons[HOP]) {
+      console.log(LEFT)
       if (this.state === Stances.IDLE) {
+        this.anims.stop()
         Hop(this, dx * HOP_SPEED, dy * HOP_SPEED)
         this.state = 'JUMPED'
       }
@@ -86,17 +91,18 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
           return
         }, 500)
       } else {
+        if (this.state === Stances.IDLE && LEFT > 0) {
+          console.log('lefting')
+          this.anims.play('left')
+        }
         Idle(this, dx * DEFAULT_SPEED)
       }
     }
-    const boat = {
-      id: 1
-    }
-    console.log(boat.id)
+    
     // All stance sprites face the direction
     // of the left thumbstick
     // this.updateHitbox()
-    this.setRotation(angle)
+    // this.setRotation(angle)
     // When you get to the arena edge,
     // wrap back around.
     this.y = modulo(this.y, ARENA_HEIGHT)
@@ -123,6 +129,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     const shrinkHitboxByAmount = 40
     const hitBoxRadius = halfWidth - shrinkHitboxByAmount
     this.body.setCircle(hitBoxRadius)
+
   }
 }
 

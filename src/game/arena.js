@@ -25,10 +25,12 @@ export default class Arena extends Phaser.Scene {
         this.backgroundData = data.backgroundData
         this.numberOfPlayers = data.numberOfPlayers
     }
+
+
   preload() {
     this.load.scenePlugin("mergedInput", MergedInput)
     this.load.multiatlas("gamepad", "assets/gamepad.json", "assets")
-    this.load.image(Stances.IDLE, "assets/Player.png")
+    this.load.image(Stances.IDLE, "assets/BEAN.png")
     this.load.image(Stances.BLOCK, "assets/Block.png")
     this.load.image(Stances.DASH, "assets/Dash.png")
     this.load.image(Stances.BALL, "assets/Ball.png")
@@ -38,12 +40,24 @@ export default class Arena extends Phaser.Scene {
     this.load.tilemapTiledJSON("tilemap", `assets/${this.mapData}`)
     this.load.image("base_tiles", `assets/${this.tileData}`)
     this.load.image("background_tiles", `assets/${this.backgroundData}`)
+
+    //Load up spritesheets
+    this.load.spritesheet('hop', 'assets/JumpBean.png', {
+      frameWidth: 64,
+      frameHeight: 64
+    })
+    this.load.spritesheet('left', 'assets/RunBeanLeft.png', {
+      frameWidth: 640,
+      frameHeight: 640
+    })
+
   }
 
+  
   create() {
     //Setup for loading the base tilemap and required tile images
     const map = this.make.tilemap({ key: "tilemap" })
-
+    
     const backgroundTileset = map.addTilesetImage(
       "sun_background",
       "background_tiles"
@@ -56,10 +70,10 @@ export default class Arena extends Phaser.Scene {
     )
     const middleTileset = map.addTilesetImage("platforms_L1", "base_tiles")
     const middleLayer = map.createLayer("middleLayer", middleTileset, 0, 0)
-
+      
     backgroundLayer.setScale(0.8)
     middleLayer.setScale(0.8)
-
+        
     //smooth out fps
     // this.physics.world.syncToRender = true
     this.physics.world.fixedStep = false
@@ -71,7 +85,7 @@ export default class Arena extends Phaser.Scene {
     this.players = Array.from(new Array(this.numberOfPlayers)).map((_, i) =>
     this.mergedInput.addPlayer(i)
     )
-    
+
     let playerGroup = this.add.group()
     this.starts = [
       [280, 600],
@@ -79,12 +93,13 @@ export default class Arena extends Phaser.Scene {
       [500, 300],
       [400, 100],
     ]
-    
-    // setup lighting + particles
+        
+        // setup lighting + particles
     this.lights.enable()
     this.lights.active = true
     this.trails = []
     this.playerColors = [[255, 0, 0], [0, 255, 0], [0, 0, 255], [255, 255, 0]]
+    
 
 
     this.players.forEach((player, i) => {
@@ -96,6 +111,7 @@ export default class Arena extends Phaser.Scene {
       player.fighter.score = 0
       player.index = i
       playerGroup.add(player.fighter)
+
       // create trail for players
       player.fighter.trail = this.add.particles('spark').createEmitter({
         speed: { min: 0, max: 0 },
@@ -107,6 +123,7 @@ export default class Arena extends Phaser.Scene {
         active: false
       })
       player.fighter.trail.reserve(1000)
+
       // create player backlight
       let [r, g, b] = this.playerColors[i]
       console.log(r)
@@ -115,6 +132,9 @@ export default class Arena extends Phaser.Scene {
       player.fighter.glow.color.g = g
       player.fighter.glow.color.b = b
       console.log(player.fighter.glow)
+
+      // setup animations for player sprite
+      
     })
     
     // Define keys (player, action, key, append)
@@ -246,6 +266,14 @@ export default class Arena extends Phaser.Scene {
           return Math.floor(Math.random() * 256)
         }
       }
+    })
+
+    // setup sprite animations
+    this.anims.create({
+      key: 'left',
+      frames: this.anims.generateFrameNumbers('left', { start: 0, end: 6 }),
+      frameRate: 12,
+      repeat: -1
     })
   }
 
