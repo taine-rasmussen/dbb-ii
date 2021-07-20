@@ -38,6 +38,16 @@ export default class Arena extends Phaser.Scene {
     this.load.tilemapTiledJSON("tilemap", `assets/${this.mapData}`)
     this.load.image("base_tiles", `assets/${this.tileData}`)
     this.load.image("background_tiles", `assets/${this.backgroundData}`)
+
+      //sound set up
+      this.load.audio('battery', 'assets/battery.wav')
+      this.load.audio('lazer', 'assets/lazer.wav')
+      this.load.audio('blaster', 'assets/blaster.mp3')
+      this.load.audio('numkey', 'assets/numkey.wav')
+      this.load.audio('stop', 'assets/stop.wav')
+      this.load.audio('keys', 'assets/keys.wav')
+    }
+
   }
 
   create() {
@@ -92,7 +102,7 @@ export default class Arena extends Phaser.Scene {
       player.fighter = new Fighter(this, x, y)
       this.add.existing(player.fighter)
       this.physics.add.existing(player.fighter, false)
-      this.physics.add.collider(middleLayer, player.fighter)
+      this.physics.add.collider(middleLayer, player.fighter, this.sound.play('numkey', { volume: 0.8 }))
       player.fighter.score = 0
       player.index = i
       playerGroup.add(player.fighter)

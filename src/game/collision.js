@@ -4,6 +4,7 @@ import scores from './arena'
 import { player1Win, player2Win } from './winFunc'
 
 function collision(player1, player2) {
+  this.sound.play('keys', { volume: 0.8 })
   console.log(player1, player2)
   if (player1.state === 'dash' && player2.state === 'base') {
     player1Win(player1, player2)
@@ -27,3 +28,4 @@ function collision(player1, player2) {
 }
 
 export default collision
+
