@@ -164,7 +164,7 @@ export default class Arena extends Phaser.Scene {
         fighter1.state === Stances.DASH &&
         fighter2.state === Stances.BLOCK
       ) {
-        handleWin(fighter1, fighter2)
+        handleWin(fighter2, fighter1)
         // Ball > Block
       } else if (
         fighter1.state === Stances.BLOCK &&
@@ -185,7 +185,7 @@ export default class Arena extends Phaser.Scene {
         fighter1.state === Stances.BALL &&
         fighter2.state === Stances.DASH
       ) {
-        handleWin(fighter1, fighter2)
+        handleWin(fighter2, fighter1)
       } else if (
         fighter1.state === Stances.BALL &&
         fighter2.state === Stances.BLOCK
