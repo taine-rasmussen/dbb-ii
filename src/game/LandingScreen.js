@@ -55,7 +55,7 @@ export default class LandingScreen extends Phaser.Scene {
         mapData: 'eye_background.json',
         tileData: "gridtiles.png", 
         backgroundData:  "eye_background.png", 
-        numberOfPlayers: 4,
+        numberOfPlayers: playerNumber,
         spawns:  eyeMap
       })
   }
@@ -69,7 +69,7 @@ export default class LandingScreen extends Phaser.Scene {
         tileData: "gridtiles.png", 
         backgroundData:  
         "dragon_background.png",
-        numberOfPlayers: 4, 
+        numberOfPlayers: playerNumber, 
         spawns:  drangonMap
       })
   }
@@ -82,7 +82,7 @@ export default class LandingScreen extends Phaser.Scene {
           mapData: 'sun_map.json', 
           tileData: "gridtiles.png", 
           backgroundData:  "sun_background.png", 
-          numberOfPlayers: 4, 
+          numberOfPlayers: playerNumber, 
           spawns: sunMap 
         })
     }
