@@ -1,41 +1,34 @@
-import MergedInput from "../main"
-import Fighter from "./Fighter"
-
-
+import MergedInput from "../main";
+import Fighter from "./Fighter";
 
 const Stances = {
   DASH: "DASH",
   BLOCK: "BLOCK",
   BALL: "BALL",
   IDLE: "IDLE",
-}
+};
 
-export const pointlights = []
+export const pointlights = [];
 export default class Arena extends Phaser.Scene {
-
-  constructor()
-    {
-        super({ key: "Arena" })
-    }
-  init(data)
-    {
-        console.log('init', data)
-        this.mapData = data.mapData
-        this.tileData = data.tileData
-        this.backgroundData = data.backgroundData
-        this.numberOfPlayers = data.numberOfPlayers
-        this.spawns = data.spawns
-    }
-
-
+  constructor() {
+    super({ key: "Arena" });
+  }
+  init(data) {
+    console.log("init", data);
+    this.mapData = data.mapData;
+    this.tileData = data.tileData;
+    this.backgroundData = data.backgroundData;
+    this.numberOfPlayers = data.numberOfPlayers;
+    this.spawns = data.spawns
+  }
   preload() {
-    this.load.scenePlugin("mergedInput", MergedInput)
-    this.load.multiatlas("gamepad", "assets/gamepad.json", "assets")
-    this.load.image(Stances.IDLE, "assets/BEAN.png")
-    this.load.image(Stances.BLOCK, "assets/Block.png")
-    this.load.image(Stances.DASH, "assets/Dash.png")
-    this.load.image(Stances.BALL, "assets/Ball.png")
-    this.load.image('spark', 'assets/blue.png')
+    this.load.scenePlugin("mergedInput", MergedInput);
+    this.load.multiatlas("gamepad", "assets/gamepad.json", "assets");
+    this.load.image(Stances.IDLE, "assets/Player.png");
+    this.load.image(Stances.BLOCK, "assets/Block.png");
+    this.load.image(Stances.DASH, "assets/Dash.png");
+    this.load.image(Stances.BALL, "assets/Ball.png");
+    this.load.image("spark", "assets/blue.png");
 
     //sound set up
     this.load.audio('battery', 'assets/battery.wav')
@@ -93,12 +86,12 @@ export default class Arena extends Phaser.Scene {
   
   create() {
     //Setup for loading the base tilemap and required tile images
-    const map = this.make.tilemap({ key: "tilemap" })
-    
+    const map = this.make.tilemap({ key: "tilemap" });
+
     const backgroundTileset = map.addTilesetImage(
       "background",
       "background_tiles"
-    )
+    );
     const backgroundLayer = map.createLayer(
       "backgroundLayer",
       backgroundTileset,
@@ -113,11 +106,11 @@ export default class Arena extends Phaser.Scene {
         
     //smooth out fps
     // this.physics.world.syncToRender = true
-    this.physics.world.fixedStep = false
-    this.physics.world.setBounds(0, 0, 1280, 720)
-    middleLayer.setCollisionByProperty({ collides: true })
-    middleLayer.setCollisionByExclusion([-1])
-    
+    this.physics.world.fixedStep = false;
+    this.physics.world.setBounds(0, 0, 1280, 720);
+    middleLayer.setCollisionByProperty({ collides: true });
+    middleLayer.setCollisionByExclusion([-1]);
+
     // Set up player objects
     this.players = Array.from(new Array(this.numberOfPlayers)).map((_, i) =>
     this.mergedInput.addPlayer(i)
@@ -163,7 +156,7 @@ export default class Arena extends Phaser.Scene {
       player.fighter.setTexture(Stances.IDLE)
 
       // create trail for players
-      player.fighter.trail = this.add.particles('spark').createEmitter({
+      player.fighter.trail = this.add.particles("spark").createEmitter({
         speed: { min: 0, max: 0 },
         scale: { start: 0.4, end: 0.1 },
         alpha: { start: 0.3, end: 0, ease: 'Expo.easeIn' },
@@ -214,103 +207,76 @@ export default class Arena extends Phaser.Scene {
       .defineKey(1, "B6", "NUMPAD_SEVEN")
       .defineKey(1, "B7", "NUMPAD_EIGHT")
       .defineKey(1, "B8", "NUMPAD_NINE")
-      .defineKey(1, "B9", "NUMPAD_ZERO")
+      .defineKey(1, "B9", "NUMPAD_ZERO");
 
-    function rockPaperScissors(fighter1, fighter2) {
-      // Dash > Idle
-      if (
-        fighter1.state === Stances.DASH && 
-        fighter2.state === Stances.IDLE
-        ) {
-        fighter1.scene.sound.play('lazer', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.DASH &&
-        fighter2.state === Stances.BALL
-      ) {
-        fighter1.scene.sound.play('lazer', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.DASH &&
-        fighter2.state === Stances.BLOCK
-      ) {
-        fighter1.scene.sound.play('lazer', { volume: 0.8 })
-        handleWin(fighter2, fighter1)
-        // Ball > Block
-      } else if (
-        fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.BALL
-      ) {
-        console.log(this)
-        fighter1.scene.sound.play('stop', { volume: 0.8 })
-        handleWin(fighter2, fighter1)
-      } else if (
-        fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.DASH
-      ) {
-        fighter1.scene.sound.play('stop', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.IDLE
-      ) {
-        fighter1.scene.sound.play('stop', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.DASH
-      ) {
-        fighter1.scene.sound.play('battery', { volume: 0.8 })
-        handleWin(fighter2, fighter1)
-      } else if (
-        fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.BLOCK
-        ) {
-        fighter1.scene.sound.play('battery', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        // Ball > Idle
-        fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.IDLE
-        ) {
-        console.log(this)
-        fighter1.scene.sound.play('battery', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      }
-
-      function handleWin(winner, loser) {
+    function rockPaperScissors(fighter, opponent) {
+      const { BALL, BLOCK, DASH, IDLE } = Stances;
+      switch (fighter.state) {
+        case BALL:
+          if (opponent.state == IDLE || opponent.state == BLOCK) {
+            return handleWin(fighter, opponent, 'battery');
+          } else if (opponent.state == DASH) {
+            return handleWin(opponent, fighter, 'lazer');
+          }
+        case BLOCK:
+          if (opponent.state == IDLE || opponent.state == DASH) {
+            return handleWin(fighter, opponent, 'stop');
+          } else if (opponent.state == BALL) {
+            return handleWin(opponent, fighter, 'battery');
+          }
+        case DASH:
+          if (opponent.state == IDLE || opponent.state == BALL) {
+            return handleWin(fighter, opponent, 'lazer');
+          } else if (opponent.state == BLOCK) {
+            return handleWin(opponent, fighter, 'stop');
+          }
+        case IDLE:
+          if (!["JUMPED", IDLE].includes(opponent.state)) {
+            return handleWin(opponent, fighter, 'stop');
+          }
+        default:
+          return [null, null];
+    
+      function handleWin(winner, loser, sfx) {
         // console.log(winner.score)
+        winner.scene.sound.play(sfx, { volume: 0.8 })
         loser.setPosition(loser.spawn.x, loser.spawn.y);
         loser.body.enable = false;
         loser.setActive(false).setVisible(false);
-        winner.score += 1
+        winner.score += 1;
         setTimeout(() => {
           loser.setActive(true).setVisible(true);
           loser.body.enable = true;
           return;
-        }, 1000)
+        }, 1000);
+        return [winner, loser];
       }
     }
 
-    for (let a of this.players) {
-      for (let b of this.players) {
-        if (a.index != b.index) {
-          this.physics.add.collider(a.fighter, b.fighter, rockPaperScissors)
-        }
+    // add player colliders the hard way
+    // (probably should be done using collision categories
+    // or groups)
+    for (let i = 0; i < this.players.length - 1; i++) {
+      for (let j = i + 1; j < this.players.length; j++) {
+        this.physics.add.collider(
+          this.players[i].fighter,
+          this.players[j].fighter,
+          rockPaperScissors
+        );
       }
     }
 
     // Set up some debug text
 
-    this.debugTexts = []
-    this.scoreTexts = []
+    this.debugTexts = [];
+    this.scoreTexts = [];
 
     this.players.forEach((player, i) => {
-      let r = this.playerColors[i][0]
-      let g = this.playerColors[i][1]
-      let b = this.playerColors[i][2]
+      let r = this.playerColors[i][0];
+      let g = this.playerColors[i][1];
+      let b = this.playerColors[i][2];
 
-      const scoreTextSpace = 300
+      const scoreTextSpace = 300;
       this.scoreTexts[i] = this.add.text(
         100 + scoreTextSpace * i,
         50,
@@ -320,16 +286,16 @@ export default class Arena extends Phaser.Scene {
           fontSize: 44,
           color: `rgb(${r}, ${g}, ${b})`, //'#00ff00'
         }
-      )
+      );
 
       // Used for distinguishing different controller texts
       // while debugging
       function randomColor() {
-        let [r, g, b] = Array.from(new Array(3)).map(randomByte)
-        return `rgb(${r}, ${g}, ${b})`
+        let [r, g, b] = Array.from(new Array(3)).map(randomByte);
+        return `rgb(${r}, ${g}, ${b})`;
         // *** helper ***
         function randomByte() {
-          return Math.floor(Math.random() * 256)
+          return Math.floor(Math.random() * 256);
         }
       }
     })
