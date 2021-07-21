@@ -36,6 +36,7 @@ export default class Arena extends Phaser.Scene {
     this.load.image(Stances.DASH, "assets/Dash.png")
     this.load.image(Stances.BALL, "assets/Ball.png")
     this.load.image('spark', 'assets/blue.png')
+    this.load.image("fullscreen", "assets/fullscreen.png")
 
     //sound set up
     this.load.audio('battery', 'assets/battery.wav')
@@ -111,6 +112,23 @@ export default class Arena extends Phaser.Scene {
     backgroundLayer.setScale(0.8)
     middleLayer.setScale(0.8)
         
+    //fullscreen
+    var button = this.add.image(1220, 30, 'fullscreen', 50).setOrigin(1, 0).setInteractive();
+    button.setScale(0.1)
+    button.on('pointerup', function () {
+        if (this.scale.isFullscreen)
+        {
+            button.setFrame(0);
+            this.scale.stopFullscreen();
+        }
+        else
+        {
+            button.setFrame(1);
+            this.scale.startFullscreen();
+        }
+    }, this);
+    //fullscreen
+
     //smooth out fps
     // this.physics.world.syncToRender = true
     this.physics.world.fixedStep = false
