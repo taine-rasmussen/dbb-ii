@@ -763,7 +763,7 @@ var MergedInput = function (_Phaser$Plugins$Scene) {
 				this.players[pad.index].direction.TIMESTAMP = this.scene.sys.time.now;
 			}
 		}
-
+	
 		/**
    * When a gamepad button is released, this function will emit a mergedInput event in the global registry.
    * The event contains a reference to the player assigned to the gamepad, and passes a mapped action and value
@@ -771,7 +771,7 @@ var MergedInput = function (_Phaser$Plugins$Scene) {
    * @param {number} value Button value
    * @param {Phaser.Input.Gamepad.Button} button Phaser Button object
    */
-
+		
 	}, {
 		key: 'gamepadButtonUp',
 		value: function gamepadButtonUp(pad, button, value) {

@@ -14,7 +14,7 @@ export default class LandingScreen extends Phaser.Scene {
         this.load.image('sun', './assets/sun_screenshot.PNG')
         this.load.image('dragon', './assets/dragon_screenshot.PNG')
         this.load.image('eye', './assets/eye_screenshot.PNG')
-        
+
     }
     create()
     {
@@ -28,7 +28,8 @@ export default class LandingScreen extends Phaser.Scene {
         const sunShot = this.add.image(200, 450, 'sun').setScale(0.3)
         const dragonShot = this.add.image(600, 450, 'dragon').setScale(0.3)
         const eyeShot = this.add.image(1000, 450, 'eye').setScale(0.3)
-    }
+        }
+        
     startEyeMap()
     {
         let playerNumber = this.mergedInput.players.length
