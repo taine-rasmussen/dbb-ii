@@ -18,6 +18,9 @@ export default class LandingScreen extends Phaser.Scene {
       mapData: 'dragon_background.json', tileData: 'gridtiles.png', backgroundData: 'dragon_background.png', spawns: []
     }
     this.playerNumber = 0
+    this.eyeSpawns = [[100, 500], [1175, 550], [475, 600], [810, 600], [495, 450], [820, 450], [225, 150], [1070, 150], [480 ,50], [800, 50], [645, 50], [645, 500]]
+    this.dragonSpawns = [[80, 100], [350, 50], [622, 100], [945, 25], [1250, 25], [1185, 400], [945, 550], [722, 325], [530, 375], [200, 550]]
+    this.sunSpawns = [[115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250]]
   }
   
   preload ()
@@ -53,7 +56,7 @@ export default class LandingScreen extends Phaser.Scene {
      tileData: "gridtiles.png",
       backgroundData:  "eye_background.png",
        numberOfPlayers: playerNumber,
-        spawns:  [[280, 600], [1000, 150], [500, 300], [400, 100]]
+        spawns:  this.eyeSpawns
     })
   }
   startDragonMap()
@@ -66,20 +69,19 @@ export default class LandingScreen extends Phaser.Scene {
       backgroundData:  
       "dragon_background.png",
       numberOfPlayers: playerNumber, 
-      spawns:  [[280, 600], [1000, 150], [500, 300], [400, 100]]
+      spawns:  this.dragonSpawns
     })
   }
   startSunMap()
   {
     let playerNumber = this.mergedInput.players.length
-    let sunMap = [[115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250]]
           this.scene.start('Arena', 
             { 
               mapData: 'sun_map.json', 
               tileData: "gridtiles.png", 
               backgroundData:  "sun_background.png", 
               numberOfPlayers: playerNumber, 
-              spawns: sunMap 
+              spawns: this.sunMap
             })
     }
     update()    
