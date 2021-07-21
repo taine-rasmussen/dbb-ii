@@ -25,10 +25,12 @@ export default class Arena extends Phaser.Scene {
         this.backgroundData = data.backgroundData
         this.numberOfPlayers = data.numberOfPlayers
     }
+
+
   preload() {
     this.load.scenePlugin("mergedInput", MergedInput)
     this.load.multiatlas("gamepad", "assets/gamepad.json", "assets")
-    this.load.image(Stances.IDLE, "assets/Player.png")
+    this.load.image(Stances.IDLE, "assets/BEAN.png")
     this.load.image(Stances.BLOCK, "assets/Block.png")
     this.load.image(Stances.DASH, "assets/Dash.png")
     this.load.image(Stances.BALL, "assets/Ball.png")
@@ -38,12 +40,52 @@ export default class Arena extends Phaser.Scene {
     this.load.tilemapTiledJSON("tilemap", `assets/${this.mapData}`)
     this.load.image("base_tiles", `assets/${this.tileData}`)
     this.load.image("background_tiles", `assets/${this.backgroundData}`)
+
+    //Load up spritesheets
+    this.load.spritesheet('hop', 'assets/JumpBean.png', {
+      frameWidth: 640,
+      frameHeight: 640
+    })
+    this.load.spritesheet('left', 'assets/RunBeanLeft.png', {
+      frameWidth: 640,
+      frameHeight: 640
+    })
+    this.load.spritesheet('Leaf2Ball', 'assets/Leaf2Ball.png', {
+      frameWidth: 64,
+      frameHeight: 64
+    })
+    this.load.spritesheet('right', 'assets/RunBeanRight.png', {
+      frameWidth: 64,
+      frameHeight: 64
+    })
+    this.load.spritesheet('Bean2Pot', 'assets/Bean2Pot.png', {
+      frameWidth: 640,
+      frameHeight: 640
+    })
+    this.load.spritesheet('Ball2Pot', 'assets/Ball2Pot.png', {
+      frameWidth: 64,
+      frameHeight: 64
+    })
+    this.load.spritesheet('Bean2Leaf', 'assets/Bean2Leaf.png', {
+      frameWidth: 625,
+      frameHeight: 640
+    })
+    this.load.spritesheet('Bean2Ball', 'assets/Bean2Ball.png', {
+      frameWidth: 640,
+      frameHeight: 640
+    })
+    this.load.spritesheet('Pot2Leaf', 'assets/Pot2Leaf.png', {
+      frameWidth: 64,
+      frameHeight: 64
+    })
+
   }
 
+  
   create() {
     //Setup for loading the base tilemap and required tile images
     const map = this.make.tilemap({ key: "tilemap" })
-
+    
     const backgroundTileset = map.addTilesetImage(
       "background",
       "background_tiles"
@@ -56,10 +98,10 @@ export default class Arena extends Phaser.Scene {
     )
     const middleTileset = map.addTilesetImage("platforms_L1", "base_tiles")
     const middleLayer = map.createLayer("middleLayer", middleTileset, 0, 0)
-
+      
     backgroundLayer.setScale(0.8)
     middleLayer.setScale(0.8)
-
+        
     //smooth out fps
     // this.physics.world.syncToRender = true
     this.physics.world.fixedStep = false
@@ -71,7 +113,7 @@ export default class Arena extends Phaser.Scene {
     this.players = Array.from(new Array(this.numberOfPlayers)).map((_, i) =>
     this.mergedInput.addPlayer(i)
     )
-    
+
     let playerGroup = this.add.group()
     this.starts = [
       [280, 600],
@@ -79,12 +121,13 @@ export default class Arena extends Phaser.Scene {
       [500, 300],
       [400, 100],
     ]
-    
-    // setup lighting + particles
+        
+        // setup lighting + particles
     this.lights.enable()
     this.lights.active = true
     this.trails = []
     this.playerColors = [[255, 0, 0], [0, 255, 0], [0, 0, 255], [255, 255, 0]]
+    
 
 
     this.players.forEach((player, i) => {
@@ -96,20 +139,23 @@ export default class Arena extends Phaser.Scene {
       player.fighter.score = 0
       player.index = i
       playerGroup.add(player.fighter)
+      player.fighter.setTexture(Stances.IDLE)
+
       // create trail for players
       player.fighter.trail = this.add.particles('spark').createEmitter({
         speed: { min: 0, max: 0 },
-        scale: { start: 0.5, end: 0.1 },
-        alpha: { start: 0.5, end: 0, ease: 'Expo.easeIn' },
+        scale: { start: 0.4, end: 0.1 },
+        alpha: { start: 0.3, end: 0, ease: 'Expo.easeIn' },
         blendMode: 'SCREEN',
         lifespan: 500,
         follow: player.fighter,
         active: false
       })
       player.fighter.trail.reserve(1000)
+
       // create player backlight
       let [r, g, b] = this.playerColors[i]
-      player.fighter.glow = this.add.pointlight(x, y, 0, 75, 0.2, 0.05)
+      player.fighter.glow = this.add.pointlight(x, y, 0, 100, 0.3, 0.05)
       player.fighter.glow.color.r = r
       player.fighter.glow.color.g = g
       player.fighter.glow.color.b = b
@@ -257,15 +303,122 @@ export default class Arena extends Phaser.Scene {
         }
       }
     })
+
+    // setup sprite animations
+    this.anims.create({
+      key: 'left',
+      frames: this.anims.generateFrameNumbers('left', { start: 0, end: 5 }),
+      frameRate: 12,
+      repeat: -1
+    })
+    this.anims.create({
+      key: 'hop',
+      frames: this.anims.generateFrameNumbers('hop'),
+      frameRate: 15,
+      repeat: 0,
+    })
+    this.anims.create({
+      key: 'Bean2Leaf',
+      frames: this.anims.generateFrameNumbers('Bean2Leaf'),
+      frameRate: 60,
+      repeat: 0,
+    })
+    this.anims.create({
+      key: 'Bean2Leaf2',
+      frames: this.anims.generateFrameNumbers('Bean2Leaf'),
+      frameRate: 30,
+      repeat: 0,
+    })
+    this.anims.create({
+      key: 'Bean2Pot',
+      frames: this.anims.generateFrameNumbers('Bean2Pot'),
+      frameRate: 30,
+      repeat: 0,
+    })
+    this.anims.create({
+      key: 'Bean2Pot2',
+      frames: this.anims.generateFrameNumbers('Bean2Pot'),
+      frameRate: 30,
+      repeat: 0,
+    })
+    this.anims.create({
+      key: 'Bean2Ball',
+      frames: this.anims.generateFrameNumbers('Bean2Ball'),
+      frameRate: 45,
+      repeat: 0,
+    })
+    this.anims.create({
+      key: 'Bean2Ball2',
+      frames: this.anims.generateFrameNumbers('Bean2Ball'),
+      frameRate: 30,
+      repeat: 0,
+    })
   }
 
   update() {
     // Loop through player inputs
 
     this.players.forEach((player, i) => {
-      let { fighter } = player
-      fighter.update(player)
+      let { fighter, buttons, direction } = player
+      let { UP, DOWN, LEFT, RIGHT } = direction
+      let dx = Number(RIGHT) - Number(LEFT)
+      let dy = Number(DOWN) - Number(UP)
+      let angle = Math.atan2(dy, dx)
+
       this.scoreTexts[i].setText(player.fighter.score)
+      fighter.body.setSize(640, 640)
+      fighter.update(player)
+
+      //control handling for animations
+      if (buttons.B0) {
+        fighter.anims.play('hop')
+      } else if (buttons.B5) {
+        fighter.anims.play('Bean2Leaf')
+        fighter.setRotation(angle)
+      } else if (buttons.B4 > 0) {
+        if(fighter.anims.getName() !== 'Bean2Pot') {
+          fighter.anims.play('Bean2Pot')
+        }
+      } else if (buttons.B2) {
+        if(fighter.anims.getName() !== 'Bean2Ball') {
+          fighter.anims.play('Bean2Ball')
+        }
+      } else if ((LEFT > 0 || RIGHT > 0) 
+        && fighter.state === Stances.IDLE 
+        && fighter.body.velocity.y === 0) {
+          if (fighter.state !== Stances.DASH) fighter.setFlipX(LEFT > 0)
+          fighter.anims.play('left', 24, false)
+      } else if (buttons.B0) {
+        fighter.anims.play('hop')
+      } else {
+        let anim = fighter.anims.getName()
+        switch (anim) {
+          case 'Bean2Pot':
+            fighter.anims.playReverse('Bean2Pot2', 30, false)
+            break
+          case 'Bean2Leaf':
+            if (fighter.state !== Stances.DASH) {
+              fighter.anims.playReverse('Bean2Leaf2')
+            }
+            break
+          case 'Bean2Leaf2':
+            fighter.setRotation(0)
+            break
+          case 'Bean2Ball':
+            fighter.anims.playReverse('Bean2Ball2', 30, false)
+            break
+          case 'left':
+            if (LEFT == 0 || RIGHT == 0) {
+              fighter.anims.stop('left', 24, false)
+            }
+            break
+          case '':
+            break
+          default:
+            return
+        }
+        fighter.update(player)
+      }
     })
     let scoreArr = []
     this.players.forEach((player) => {
