@@ -333,6 +333,12 @@ export default class Arena extends Phaser.Scene {
     this.anims.create({
       key: 'Bean2Ball',
       frames: this.anims.generateFrameNumbers('Bean2Ball'),
+      frameRate: 45,
+      repeat: 0,
+    })
+    this.anims.create({
+      key: 'Bean2Ball2',
+      frames: this.anims.generateFrameNumbers('Bean2Ball'),
       frameRate: 30,
       repeat: 0,
     })
@@ -356,13 +362,8 @@ export default class Arena extends Phaser.Scene {
       if (buttons.B0) {
         fighter.anims.play('hop')
       } else if (buttons.B5) {
-        fighter.setRotation(angle)
         fighter.anims.play('Bean2Leaf')
-        fighter.on('animationcomplete-' + 'Bean2Leaf', () => {
-          setTimeout(() => {
-            fighter.anims.playReverse('Bean2Leaf2')
-          }, 500)
-        })
+        fighter.setRotation(angle)
       } else if (buttons.B4 > 0) {
         if(fighter.anims.getName() !== 'Bean2Pot') {
           fighter.anims.play('Bean2Pot')
@@ -371,8 +372,11 @@ export default class Arena extends Phaser.Scene {
         if(fighter.anims.getName() !== 'Bean2Ball') {
           fighter.anims.play('Bean2Ball')
         }
-      } else if (buttons.B0) {
-        fighter.anims.play('hop')
+      } else if ((LEFT > 0 || RIGHT > 0) 
+        && fighter.state === Stances.IDLE 
+        && fighter.body.velocity.y === 0) {
+          if (fighter.state !== Stances.DASH) fighter.setFlipX(LEFT > 0)
+          fighter.anims.play('left', 24, false)
       } else if (buttons.B0) {
         fighter.anims.play('hop')
       } else {
@@ -381,22 +385,31 @@ export default class Arena extends Phaser.Scene {
           case 'Bean2Pot':
             fighter.anims.playReverse('Bean2Pot2', 30, false)
             break
+          case 'Bean2Leaf':
+            if (fighter.state !== Stances.DASH) {
+              fighter.anims.playReverse('Bean2Leaf2')
+            }
+            break
           case 'Bean2Leaf2':
             fighter.setRotation(0)
             break
+          case 'Bean2Ball':
+            fighter.anims.playReverse('Bean2Ball2', 30, false)
+            break
           case 'left':
-            if (fighter.body.velocity.x > 50 || fighter.body.velocity.x < -50) {
-              console.log('want play')
-              fighter.anims.chain('left', 24, false)
-            } else {
-              fighter.anims.stop('left')
+            if (LEFT == 0 || RIGHT == 0) {
+              fighter.anims.stop('left', 24, false)
             }
             break
           case '':
-            if (fighter.body.velocity.x > 50 || fighter.body.velocity.x < -50) {
-              fighter.anims.play('left', 24, false)
-              console.log('play')
-            }
+            // if (
+            //   (LEFT > 0 || RIGHT > 0)
+            //   && fighter.state === Stances.IDLE) {
+            //   console.log('want play null')
+            //   fighter.anims.play('left', 24, false)
+            // } else {
+            //   fighter.anims.stop()
+            // }
             break
           default:
             return

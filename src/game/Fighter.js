@@ -98,14 +98,14 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     // this.setRotation(angle)
     // When you get to the arena edge,
     // wrap back around.
-    if (this.state !== Stances.DASH) this.setFlipX(LEFT > 0)
+    if (this.state !== Stances.DASH) this.setFlipX(this.LEFT > 0)
     this.y = modulo(this.y, ARENA_HEIGHT)
     this.x = modulo(this.x, ARENA_WIDTH)
     
     // move glow
     this.glow.setPosition(this.x, this.y)
   }
-
+  
   setStance(stanceName) {
     if (!Object.values(Stances).includes(stanceName)) {
       throw new Error(`Stance ${stanceName} must be a defined stance.`)
