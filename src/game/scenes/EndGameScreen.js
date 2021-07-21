@@ -1,4 +1,4 @@
-import MergedInput from '../../main.js'
+import MergedInput from '../main.js'
 
 export default class EndGameScreen extends Phaser.Scene {
   constructor()
@@ -12,7 +12,6 @@ export default class EndGameScreen extends Phaser.Scene {
   preload()
   {
     this.load.scenePlugin('mergedInput', MergedInput);
-
   }
   create()
   {
