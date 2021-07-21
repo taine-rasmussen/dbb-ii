@@ -1,5 +1,6 @@
 import Arena from "./arena.js";
 import LandingScreen from './LandingScreen.js'
+import EndGameScreen from "./EndGameScreen.js";
 
 const config = {
   parent: "monitor",
@@ -18,7 +19,8 @@ const config = {
   },
   scene: [
       LandingScreen,
-      Arena
+      Arena,
+      EndGameScreen
   ]
 
 };

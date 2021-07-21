@@ -29,6 +29,7 @@ export default class Arena extends Phaser.Scene {
     this.load.image(Stances.DASH, "assets/Dash.png");
     this.load.image(Stances.BALL, "assets/Ball.png");
     this.load.image("spark", "assets/blue.png");
+    this.loadFont('Ruslan', './assets/RuslanDisplay-Regular.ttf')
 
     //sound set up
     this.load.audio("battery", "assets/battery.wav");
@@ -145,6 +146,8 @@ export default class Arena extends Phaser.Scene {
       this.spawns.splice(n, 1);
     }
     console.log("Array of random cords", randomSpawn);
+    //handles win condition, sends score to end
+
 
     this.players.forEach((player, i) => {
       let [x, y] = randomSpawn[i];
@@ -285,11 +288,11 @@ export default class Arena extends Phaser.Scene {
         50,
         player.fighter.score,
         {
-          fontFamily: "Arial",
+          fontFamily: "Ruslan",
           fontSize: 44,
           color: `rgb(${r}, ${g}, ${b})`, //'#00ff00'
         }
-      );
+      ).setShadow(2, 2, "#333333", 2, false, true);
 
       // Used for distinguishing different controller texts
       // while debugging
@@ -361,8 +364,9 @@ export default class Arena extends Phaser.Scene {
   }
 
   update() {
-    // Loop through player inputs
 
+
+    // Loop through player inputs
     this.players.forEach((player, i) => {
       let { fighter, buttons, direction } = player;
       let { UP, DOWN, LEFT, RIGHT } = direction;
@@ -373,6 +377,20 @@ export default class Arena extends Phaser.Scene {
       this.scoreTexts[i].setText(player.fighter.score);
       fighter.body.setSize(640, 640);
       fighter.update(player);
+
+      //sets win condition(first to 11) then sends player scores to end scene
+      let scoreArr = []
+      this.players.forEach((player) => {
+          if (player.fighter.score === 11){
+            this.players.map((pl) => {
+              scoreArr.push({
+                id: pl.index + 1,
+                score: pl.fighter.score
+              })
+            })
+            this.scene.start('EndGameScreen', {scores: scoreArr})
+          }
+        })
 
       //control handling for animations
       if (buttons.B0) {
@@ -434,6 +452,14 @@ export default class Arena extends Phaser.Scene {
         }
         fighter.update(player);
       }
+    });
+  }
+  loadFont(name, url) {
+    var newFont = new FontFace(name, `url(${url})`);
+    newFont.load().then(function (loaded) {
+        document.fonts.add(loaded);
+    }).catch(function (error) {
+        return error;
     });
   }
 }
