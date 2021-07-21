@@ -214,69 +214,35 @@ export default class Arena extends Phaser.Scene {
       .defineKey(1, "B6", "NUMPAD_SEVEN")
       .defineKey(1, "B7", "NUMPAD_EIGHT")
       .defineKey(1, "B8", "NUMPAD_NINE")
-      .defineKey(1, "B9", "NUMPAD_ZERO")
 
-    function rockPaperScissors(fighter1, fighter2) {
-      // Dash > Idle
-      if (
-        fighter1.state === Stances.DASH && 
-        fighter2.state === Stances.IDLE
-        ) {
-        fighter1.scene.sound.play('lazer', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.DASH &&
-        fighter2.state === Stances.BALL
-      ) {
-        fighter1.scene.sound.play('lazer', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.DASH &&
-        fighter2.state === Stances.BLOCK
-      ) {
-        fighter1.scene.sound.play('lazer', { volume: 0.8 })
-        handleWin(fighter2, fighter1)
-        // Ball > Block
-      } else if (
-        fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.BALL
-      ) {
-        console.log(this)
-        fighter1.scene.sound.play('stop', { volume: 0.8 })
-        handleWin(fighter2, fighter1)
-      } else if (
-        fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.DASH
-      ) {
-        fighter1.scene.sound.play('stop', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.IDLE
-      ) {
-        fighter1.scene.sound.play('stop', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.DASH
-      ) {
-        fighter1.scene.sound.play('battery', { volume: 0.8 })
-        handleWin(fighter2, fighter1)
-      } else if (
-        fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.BLOCK
-        ) {
-        fighter1.scene.sound.play('battery', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        // Ball > Idle
-        fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.IDLE
-        ) {
-        console.log(this)
-        fighter1.scene.sound.play('battery', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      }
+      function rockPaperScissors(fighter, opponent) {
+        const { BALL, BLOCK, DASH, IDLE } = Stances;
+        switch (fighter.state) {
+          case BALL:
+            if (opponent.state == IDLE || opponent.state == BLOCK) {
+              return handleWin(fighter, opponent, "battery");
+            } else if (opponent.state == DASH) {
+              return handleWin(opponent, fighter, "lazer");
+            }
+          case BLOCK:
+            if (opponent.state == IDLE || opponent.state == DASH) {
+              return handleWin(fighter, opponent, "stop");
+            } else if (opponent.state == BALL) {
+              return handleWin(opponent, fighter, "battery");
+            }
+          case DASH:
+            if (opponent.state == IDLE || opponent.state == BALL) {
+              return handleWin(fighter, opponent, "lazer");
+            } else if (opponent.state == BLOCK) {
+              return handleWin(opponent, fighter, "stop");
+            }
+          case IDLE:
+            if (!["JUMPED", IDLE].includes(opponent.state)) {
+              return handleWin(opponent, fighter, "stop");
+            }
+          default:
+            return [null, null];
+          }
 
       function handleWin(winner, loser) {
         // console.log(winner.score)
