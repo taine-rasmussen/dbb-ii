@@ -35,6 +35,7 @@ export default class Arena extends Phaser.Scene {
     this.load.image(Stances.DASH, "assets/Dash.png")
     this.load.image(Stances.BALL, "assets/Ball.png")
     this.load.image('spark', 'assets/blue.png')
+    this.loadFont('Ruslan', './assets/RuslanDisplay-Regular.ttf')
 
     //Setup for loading the base tilemap and required tile images
     this.load.tilemapTiledJSON("tilemap", `assets/${this.mapData}`)
@@ -284,11 +285,11 @@ export default class Arena extends Phaser.Scene {
         50,
         player.fighter.score,
         {
-          fontFamily: "Arial",
+          fontFamily: "Ruslan",
           fontSize: 44,
           color: `rgb(${r}, ${g}, ${b})`, //'#00ff00'
         }
-      )
+      ).setShadow(2, 2, "#333333", 2, false, true);
 
       
 
@@ -432,5 +433,13 @@ export default class Arena extends Phaser.Scene {
           this.scene.start('EndGameScreen', {scores: scoreArr})
         }
       })
+  }
+  loadFont(name, url) {
+    var newFont = new FontFace(name, `url(${url})`);
+    newFont.load().then(function (loaded) {
+        document.fonts.add(loaded);
+    }).catch(function (error) {
+        return error;
+    });
   }
 }

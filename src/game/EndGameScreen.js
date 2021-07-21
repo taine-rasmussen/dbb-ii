@@ -9,29 +9,38 @@ export default class EndGameScreen extends Phaser.Scene {
   {
     this.scores = data.scores
     this.scoreColours =[`rgb(255, 0, 0)`, `rgb(0, 255, 0)`, `rgb(0, 0, 255)`, `rgb(255, 255, 0)`, `rgb(0, 255, 255)`]
+    this.loadFont("Ruslan", "assets/RuslanDisplay-Regular.ttf")
   }
   preload()
   {
     this.load.scenePlugin('mergedInput', MergedInput);
-    this.load.image('ebg', './assets/pheonix_background.png')
+    this.load.image('ebg', './assets/endscreen.png')
+    this.load.image('home', './assets/home.png')
   }
   create()
   {
     var bg = this.add.image(640, 360, 'ebg')
-    var text = this.add.text(350, 300, "Game Over!", { fontFamily: "Arial Black", fontSize: 82, color: '#111111'});
-    text.setStroke('#000000', 4);
-    //  Apply the gradient fill.
-    const gradient = text.context.createLinearGradient(0, 0, 0, text.height);
-    gradient.addColorStop(0, '#111111');
-    gradient.addColorStop(.5, '#ffffff');
-    gradient.addColorStop(.5, '#aaaaaa');
-    gradient.addColorStop(1, '#111111');
-    text.setFill(gradient);
+    var home = this.add.image(600, 650, 'home').setInteractive().setScale(0.6)
+    home.once('pointerup', this.sendHome, this)
     this.scores.forEach((x, i) => {
-      this.add.text(220 * x.id, 100,
+      this.add.text(220 * x.id, 200,
          `Player ${x.id}\n
 ${x.score} points`,
-          { fontSize: 20, color: this.scoreColours[i] })
+          { fontFamily: 'Ruslan', fontSize: 40, color: this.scoreColours[i] })
+          .setShadow(2, 2, "#333333", 2, false, true);
     })
+}
+sendHome()
+  {
+    this.scene.start('LandingScreen')
+  }
+
+loadFont(name, url) {
+  var newFont = new FontFace(name, `url(${url})`);
+  newFont.load().then(function (loaded) {
+      document.fonts.add(loaded);
+  }).catch(function (error) {
+      return error;
+  });
 }
 }

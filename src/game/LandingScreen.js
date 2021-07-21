@@ -1,4 +1,6 @@
 import MergedInput from '../main.js'
+
+
 export default class LandingScreen extends Phaser.Scene {
 
     
@@ -10,29 +12,30 @@ export default class LandingScreen extends Phaser.Scene {
     {
         this.load.scenePlugin('mergedInput', MergedInput);
         this.load.image('button', './assets/select.png')
-        this.load.image('bg', './assets/basic_sky.png')
+        this.load.image('bg', './assets/start_screen.png')
         this.load.image('sun', './assets/sun_screenshot.PNG')
         this.load.image('dragon', './assets/dragon_screenshot.PNG')
         this.load.image('eye', './assets/eye_screenshot.PNG')
-
+        this.loadFont('Ruslan', './assets/RuslanDisplay-Regular.ttf')
     }
     create()
     {
-        const bg = this.add.image(640, 360, 'bg')
-        const sunButton = this.add.image(200, 600, 'button').setInteractive().setScale(0.5);
-        const dragonButton = this.add.image(600, 600, 'button').setInteractive().setScale(0.5);
-        const eyeButton = this.add.image(1000, 600, 'button').setInteractive().setScale(0.5);
-        sunButton.once('pointerup', this.startSunMap, this)
-        dragonButton.once('pointerup', this.startDragonMap, this)
-        eyeButton.once('pointerup', this.startEyeMap, this)
-        const sunShot = this.add.image(200, 450, 'sun').setScale(0.3)
-        const dragonShot = this.add.image(600, 450, 'dragon').setScale(0.3)
-        const eyeShot = this.add.image(1000, 450, 'eye').setScale(0.3)
-        }
-        
+        const bg = this.add.image(640, 360, 'bg').setScale(0.8)
+        const sunShot = this.add.image(310, 565, 'sun').setInteractive().setScale(0.3)
+        const dragonShot = this.add.image(645, 565, 'dragon').setInteractive().setScale(0.3)
+        const eyeShot = this.add.image(970, 565, 'eye').setInteractive().setScale(0.3)
+        sunShot.once('pointerup', this.startSunMap, this)
+        dragonShot.once('pointerup', this.startDragonMap, this)
+        eyeShot.once('pointerup', this.startEyeMap, this)
+        const pickAMap = this.add.text(390, 400, 'Click a map to play!', {
+            fontFamily: 'Ruslan', 
+            fontSize: 40
+        }).setShadow(2, 2, "#333333", 2, false, true);
+    }   
     startEyeMap()
     {
-        let playerNumber = this.mergedInput.players.length
+        // let playerNumber = this.mergedInput.players.length
+        let playerNumber = 2
         this.scene.start('Arena', { mapData: 'eye_background.json', tileData: "gridtiles.png", backgroundData:  "eye_background.png", numberOfPlayers: playerNumber })
     }
     startDragonMap()
@@ -50,4 +53,13 @@ export default class LandingScreen extends Phaser.Scene {
             this.add.text(200 * i + 100, 100, `Player ${i + 1} joined!`, { fontSize: 20, color: '#00ff00' })
         })
     }
+    loadFont(name, url) {
+        var newFont = new FontFace(name, `url(${url})`);
+        newFont.load().then(function (loaded) {
+            document.fonts.add(loaded);
+        }).catch(function (error) {
+            return error;
+        });
+      }
+    
 } 
