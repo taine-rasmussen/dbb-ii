@@ -81,7 +81,7 @@ export default class LandingScreen extends Phaser.Scene {
               tileData: "gridtiles.png", 
               backgroundData:  "sun_background.png", 
               numberOfPlayers: playerNumber, 
-              spawns: this.sunMap
+              spawns: this.sunSpawns
             })
     }
     update()    
