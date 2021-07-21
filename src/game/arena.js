@@ -163,58 +163,59 @@ export default class Arena extends Phaser.Scene {
       // Dash > Idle
       if (
         fighter1.state === Stances.DASH && 
-        fighter2.state === Stances.IDLE,
-        this.scene.sound.play('lazer', { volume: 0.8 })) {
+        fighter2.state === Stances.IDLE
+        ) {
+        this.scene.sound.play('lazer', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       } else if (
         fighter1.state === Stances.DASH &&
-        fighter2.state === Stances.BALL,
-        this.scene.sound.play('lazer', { volume: 0.8 })
+        fighter2.state === Stances.BALL
       ) {
+        this.scene.sound.play('lazer', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       } else if (
         fighter1.state === Stances.DASH &&
-        fighter2.state === Stances.BLOCK,
-        this.scene.sound.play('lazer', { volume: 0.8 })
+        fighter2.state === Stances.BLOCK
       ) {
+        this.scene.sound.play('lazer', { volume: 0.8 })
         handleWin(fighter2, fighter1)
         // Ball > Block
       } else if (
         fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.BALL,
-        this.scene.sound.play('stop', { volume: 0.8 })
+        fighter2.state === Stances.BALL
       ) {
+        this.scene.sound.play('stop', { volume: 0.8 })
         handleWin(fighter2, fighter1)
       } else if (
         fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.DASH,
-        this.scene.sound.play('stop', { volume: 0.8 })
+        fighter2.state === Stances.DASH
       ) {
+        this.scene.sound.play('stop', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       } else if (
         fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.IDLE,
-        this.scene.sound.play('stop', { volume: 0.8 })
+        fighter2.state === Stances.IDLE
       ) {
+        this.scene.sound.play('stop', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       } else if (
         fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.DASH,
-        this.scene.sound.play('battery', { volume: 0.8 })
+        fighter2.state === Stances.DASH
       ) {
+        this.scene.sound.play('battery', { volume: 0.8 })
         handleWin(fighter2, fighter1)
       } else if (
         fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.BLOCK,
+        fighter2.state === Stances.BLOCK
+        ) {
         this.scene.sound.play('battery', { volume: 0.8 })
-      ) {
         handleWin(fighter1, fighter2)
       } else if (
         // Ball > Idle
         fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.IDLE,
-        this.scene.sound.play('battery', { volume: 0.8 })
+        fighter2.state === Stances.IDLE
       ) {
+        this.scene.sound.play('battery', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       }
 
