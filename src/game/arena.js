@@ -93,14 +93,14 @@ export default class Arena extends Phaser.Scene {
     this.lights.active = true
     this.trails = []
     this.playerColors = [[255, 0, 0], [0, 255, 0], [0, 0, 255], [255, 255, 0]]
-
+    
 
     this.players.forEach((player, i) => {
       let [x, y] = this.starts[i]
       player.fighter = new Fighter(this, x, y)
       this.add.existing(player.fighter)
       this.physics.add.existing(player.fighter, false)
-      this.physics.add.collider(middleLayer, player.fighter, () => this.sound.play('keys', { volume: 0.8 }))
+      this.physics.add.collider(middleLayer, player.fighter)
       player.fighter.score = 0
       player.index = i
       playerGroup.add(player.fighter)
