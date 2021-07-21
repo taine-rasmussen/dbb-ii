@@ -24,11 +24,12 @@ export default class Arena extends Phaser.Scene {
   preload() {
     this.load.scenePlugin("mergedInput", MergedInput);
     this.load.multiatlas("gamepad", "assets/gamepad.json", "assets");
-    this.load.image(Stances.IDLE, "assets/Player.png");
+    this.load.image(Stances.IDLE, "assets/BEAN.png");
     this.load.image(Stances.BLOCK, "assets/Block.png");
     this.load.image(Stances.DASH, "assets/Dash.png");
     this.load.image(Stances.BALL, "assets/Ball.png");
     this.load.image("spark", "assets/blue.png");
+    this.load.image("fullscreen", "assets/fullscreen.png");
 
     //sound set up
     this.load.audio('battery', 'assets/battery.wav')
@@ -105,7 +106,8 @@ export default class Arena extends Phaser.Scene {
     middleLayer.setScale(0.8)
         
 //fullscreen
-var button = this.add.image(900-16, 16, 'fullscreen', 0).setOrigin(1, 0).setInteractive();
+var button = this.add.image(1220, 30, 'fullscreen', 50).setOrigin(1, 0).setInteractive();
+button.setScale(0.1)
 button.on('pointerup', function () {
     if (this.scale.isFullscreen)
     {
@@ -268,6 +270,7 @@ button.on('pointerup', function () {
         return [winner, loser];
       }
     }
+  }
 
     // add player colliders the hard way
     // (probably should be done using collision categories
@@ -332,7 +335,7 @@ button.on('pointerup', function () {
     this.anims.create({
       key: 'Bean2Leaf',
       frames: this.anims.generateFrameNumbers('Bean2Leaf'),
-      frameRate: 60,
+      frameRate: 80,
       repeat: 0,
     })
     this.anims.create({
@@ -410,7 +413,9 @@ button.on('pointerup', function () {
             break
           case 'Bean2Leaf':
             if (fighter.state !== Stances.DASH) {
-              fighter.anims.playReverse('Bean2Leaf2')
+              setTimeout(() => {
+                fighter.anims.playReverse('Bean2Leaf2')
+              }, 250)
             }
             break
           case 'Bean2Leaf2':
