@@ -72,14 +72,6 @@ export default class Arena extends Phaser.Scene {
     this.mergedInput.addPlayer(i)
     )
     
-    let playerGroup = this.add.group()
-    this.starts = [
-      [280, 600],
-      [1000, 150],
-      [500, 300],
-      [400, 100],
-    ]
-    
     // setup lighting + particles
     this.lights.enable()
     this.lights.active = true
@@ -87,9 +79,46 @@ export default class Arena extends Phaser.Scene {
     this.playerColors = [[255, 0, 0], [0, 255, 0], [0, 0, 255], [255, 255, 0]]
 
 
+// Fullscreen - waiting on assets
+    //  var button = this.add.image(1000-16, 16, Stances.BLOCK, 500).setOrigin(1, 0).setInteractive();
+    //             button.on('pointerup', function () {
+    //                 if (this.scale.isFullscreen) {
+    //                     button.setFrame(0);
+    //                     this.scale.stopFullscreen();
+    //                 } else {
+    //                     button.setFrame(1);
+    //                     this.scale.startFullscreen();
+    //                 }
+    //             }, this);
+// Fullscreen - waiting on assets
+
+
+// Random spawns
+    console.log('Current number of players is:', this.players.length)
+
+    // Spawn points for maps
+    let map1Spawns = [[100, 100], [1000, 100], [650, 200], [300, 400], [1000, 400]] // OG purple map
+    let sunMap = [[115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250]]
+
+
+    let randomSpawn = [];
+    let playerGroup = this.add.group();
+    
+    // Creates new array of random spawns based on amount of players in the game
+    for (var i = 0; i < this.players.length; i++) {
+          var n = Math.floor(Math.random() * sunMap.length);
+          randomSpawn.push(sunMap[n]);
+          sunMap.splice(n, 1);
+      }
+      console.log('Array of random cords', randomSpawn)
+      
+// Random spawns
+
     this.players.forEach((player, i) => {
-      let [x, y] = this.starts[i]
-      player.fighter = new Fighter(this, x, y)
+     
+      console.log('Player spawned at:', 'X:',randomSpawn[i][0], 'Y:',randomSpawn[i][1])
+      player.fighter = new Fighter(this, randomSpawn[i][0], randomSpawn[i][1]) 
+
       this.add.existing(player.fighter)
       this.physics.add.existing(player.fighter, false)
       this.physics.add.collider(middleLayer, player.fighter)
@@ -106,13 +135,13 @@ export default class Arena extends Phaser.Scene {
         follow: player.fighter,
         active: false
       })
-      player.fighter.trail.reserve(1000)
-      // create player backlight
-      let [r, g, b] = this.playerColors[i]
-      player.fighter.glow = this.add.pointlight(x, y, 0, 75, 0.2, 0.05)
-      player.fighter.glow.color.r = r
-      player.fighter.glow.color.g = g
-      player.fighter.glow.color.b = b
+      // player.fighter.trail.reserve(1000)
+      // // create player backlight
+      // let [r, g, b] = this.playerColors[i]
+      // player.fighter.glow = this.add.pointlight(x, y, 0, 75, 0.2, 0.05)
+      // player.fighter.glow.color.r = r
+      // player.fighter.glow.color.g = g
+      // player.fighter.glow.color.b = b
     })
     
     // Define keys (player, action, key, append)

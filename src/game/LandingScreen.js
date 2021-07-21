@@ -49,16 +49,17 @@ export default class LandingScreen extends Phaser.Scene {
     startEyeMap()
     {
         let playerNumber = this.mergedInput.players.length
-        this.scene.start('Arena', { mapData: 'eye_background.json', tileData: "gridtiles.png", backgroundData:  "eye_background.png", numberOfPlayers: playerNumber })
+        this.scene.start('Arena', { mapData: 'eye_background.json', tileData: "gridtiles.png", backgroundData:  "eye_background.png", numberOfPlayers: 4 }) 
     }
     startDragonMap()
     {
         let playerNumber = this.mergedInput.players.length
-            this.scene.start('Arena', { mapData: 'dragon_background.json', tileData: "gridtiles.png", backgroundData:  "dragon_background.png", numberOfPlayers: playerNumber })    }
+            this.scene.start('Arena', { mapData: 'dragon_background.json', tileData: "gridtiles.png", backgroundData:  "dragon_background.png", numberOfPlayers: 4 })   
+    }
     startSunMap()
     {
         let playerNumber = this.mergedInput.players.length
-            this.scene.start('Arena', { mapData: 'sun_map.json', tileData: "gridtiles.png", backgroundData:  "sun_background.png", numberOfPlayers: playerNumber })
+            this.scene.start('Arena', { mapData: 'sun_map.json', tileData: "gridtiles.png", backgroundData:  "sun_background.png", numberOfPlayers: 4  })
     }
     update()    
     {
