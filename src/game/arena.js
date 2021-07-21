@@ -29,13 +29,19 @@ export default class Arena extends Phaser.Scene {
 
 
   preload() {
-    this.load.scenePlugin("mergedInput", MergedInput)
-    this.load.multiatlas("gamepad", "assets/gamepad.json", "assets")
-    this.load.image(Stances.IDLE, "assets/BEAN.png")
-    this.load.image(Stances.BLOCK, "assets/Block.png")
-    this.load.image(Stances.DASH, "assets/Dash.png")
-    this.load.image(Stances.BALL, "assets/Ball.png")
-    this.load.image('spark', 'assets/blue.png')
+
+    this.load.scenePlugin("mergedInput", MergedInput);
+    this.load.multiatlas("gamepad", "assets/gamepad.json", "assets");
+    this.load.image(Stances.IDLE, "assets/Player.png");
+    this.load.image(Stances.BLOCK, "assets/Block.png");
+    this.load.image(Stances.DASH, "assets/Dash.png");
+    this.load.image(Stances.BALL, "assets/Ball.png");
+    this.load.image("spark", "assets/blue.png");
+    this.loadFont('Ruslan', './assets/RuslanDisplay-Regular.ttf')
+
+    this.load.image("fullscreen", "assets/fullscreen.png")
+
+
 
     //sound set up
     this.load.audio('battery', 'assets/battery.wav')
@@ -59,11 +65,11 @@ export default class Arena extends Phaser.Scene {
       frameWidth: 640,
       frameHeight: 640
     })
-    this.load.spritesheet('Leaf2Ball', 'assets/Leaf2Ball.png', {
-      frameWidth: 64,
-      frameHeight: 64
-    })
     this.load.spritesheet('right', 'assets/RunBeanRight.png', {
+      frameWidth: 640,
+      frameHeight: 630
+    })
+    this.load.spritesheet('Leaf2Ball', 'assets/Leaf2Ball.png', {
       frameWidth: 64,
       frameHeight: 64
     })
@@ -111,6 +117,23 @@ export default class Arena extends Phaser.Scene {
     backgroundLayer.setScale(0.8)
     middleLayer.setScale(0.8)
         
+    //fullscreen
+    var button = this.add.image(1220, 30, 'fullscreen', 50).setOrigin(1, 0).setInteractive();
+    button.setScale(0.1)
+    button.on('pointerup', function () {
+        if (this.scale.isFullscreen)
+        {
+            button.setFrame(0);
+            this.scale.stopFullscreen();
+        }
+        else
+        {
+            button.setFrame(1);
+            this.scale.startFullscreen();
+        }
+    }, this);
+    //fullscreen
+
     //smooth out fps
     // this.physics.world.syncToRender = true
     this.physics.world.fixedStep = false
@@ -203,69 +226,35 @@ export default class Arena extends Phaser.Scene {
       .defineKey(1, "B6", "NUMPAD_SEVEN")
       .defineKey(1, "B7", "NUMPAD_EIGHT")
       .defineKey(1, "B8", "NUMPAD_NINE")
-      .defineKey(1, "B9", "NUMPAD_ZERO")
 
-    function rockPaperScissors(fighter1, fighter2) {
-      // Dash > Idle
-      if (
-        fighter1.state === Stances.DASH && 
-        fighter2.state === Stances.IDLE
-        ) {
-        fighter1.scene.sound.play('lazer', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.DASH &&
-        fighter2.state === Stances.BALL
-      ) {
-        fighter1.scene.sound.play('lazer', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.DASH &&
-        fighter2.state === Stances.BLOCK
-      ) {
-        fighter1.scene.sound.play('lazer', { volume: 0.8 })
-        handleWin(fighter2, fighter1)
-        // Ball > Block
-      } else if (
-        fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.BALL
-      ) {
-        console.log(this)
-        fighter1.scene.sound.play('stop', { volume: 0.8 })
-        handleWin(fighter2, fighter1)
-      } else if (
-        fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.DASH
-      ) {
-        fighter1.scene.sound.play('stop', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.BLOCK &&
-        fighter2.state === Stances.IDLE
-      ) {
-        fighter1.scene.sound.play('stop', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.DASH
-      ) {
-        fighter1.scene.sound.play('battery', { volume: 0.8 })
-        handleWin(fighter2, fighter1)
-      } else if (
-        fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.BLOCK
-        ) {
-        fighter1.scene.sound.play('battery', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      } else if (
-        // Ball > Idle
-        fighter1.state === Stances.BALL &&
-        fighter2.state === Stances.IDLE
-        ) {
-        console.log(this)
-        fighter1.scene.sound.play('battery', { volume: 0.8 })
-        handleWin(fighter1, fighter2)
-      }
+      function rockPaperScissors(fighter, opponent) {
+        const { BALL, BLOCK, DASH, IDLE } = Stances;
+        switch (fighter.state) {
+          case BALL:
+            if (opponent.state == IDLE || opponent.state == BLOCK) {
+              return handleWin(fighter, opponent, "battery");
+            } else if (opponent.state == DASH) {
+              return handleWin(opponent, fighter, "lazer");
+            }
+          case BLOCK:
+            if (opponent.state == IDLE || opponent.state == DASH) {
+              return handleWin(fighter, opponent, "stop");
+            } else if (opponent.state == BALL) {
+              return handleWin(opponent, fighter, "battery");
+            }
+          case DASH:
+            if (opponent.state == IDLE || opponent.state == BALL) {
+              return handleWin(fighter, opponent, "lazer");
+            } else if (opponent.state == BLOCK) {
+              return handleWin(opponent, fighter, "stop");
+            }
+          case IDLE:
+            if (!["JUMPED", IDLE].includes(opponent.state)) {
+              return handleWin(opponent, fighter, "stop");
+            }
+          default:
+            return [null, null];
+          }
 
       function handleWin(winner, loser) {
         // console.log(winner.score)
@@ -305,11 +294,11 @@ export default class Arena extends Phaser.Scene {
         50,
         player.fighter.score,
         {
-          fontFamily: "Arial",
+          fontFamily: "Ruslan",
           fontSize: 44,
           color: `rgb(${r}, ${g}, ${b})`, //'#00ff00'
         }
-      )
+      ).setShadow(2, 2, "#333333", 2, false, true);
 
       // Used for distinguishing different controller texts
       // while debugging
@@ -327,6 +316,12 @@ export default class Arena extends Phaser.Scene {
     this.anims.create({
       key: 'left',
       frames: this.anims.generateFrameNumbers('left', { start: 0, end: 5 }),
+      frameRate: 12,
+      repeat: -1
+    })
+    this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('right', { start: 0, end: 5 }),
       frameRate: 12,
       repeat: -1
     })
@@ -375,8 +370,9 @@ export default class Arena extends Phaser.Scene {
   }
 
   update() {
-    // Loop through player inputs
 
+
+    // Loop through player inputs
     this.players.forEach((player, i) => {
       let { fighter, buttons, direction } = player
       let { UP, DOWN, LEFT, RIGHT } = direction
@@ -387,6 +383,20 @@ export default class Arena extends Phaser.Scene {
       this.scoreTexts[i].setText(player.fighter.score)
       fighter.body.setSize(640, 640)
       fighter.update(player)
+
+      //sets win condition(first to 11) then sends player scores to end scene
+      let scoreArr = []
+      this.players.forEach((player) => {
+          if (player.fighter.score === 11){
+            this.players.map((pl) => {
+              scoreArr.push({
+                id: pl.index + 1,
+                score: pl.fighter.score
+              })
+            })
+            this.scene.start('EndGameScreen', {scores: scoreArr})
+          }
+        })
 
       //control handling for animations
       if (buttons.B0) {
@@ -402,11 +412,18 @@ export default class Arena extends Phaser.Scene {
         if(fighter.anims.getName() !== 'Bean2Ball') {
           fighter.anims.play('Bean2Ball')
         }
-      } else if ((LEFT > 0 || RIGHT > 0) 
+      } else if ((LEFT > 0 && RIGHT === 0) 
         && fighter.state === Stances.IDLE 
         && fighter.body.velocity.y === 0) {
-          if (fighter.state !== Stances.DASH) fighter.setFlipX(LEFT > 0)
+          // if (fighter.state !== Stances.DASH) fighter.setFlipX(LEFT > 0)
+          console.log('left')
           fighter.anims.play('left', 24, false)
+      } else if ((LEFT === 0 && RIGHT > 0) 
+      && fighter.state === Stances.IDLE 
+      && fighter.body.velocity.y === 0) {
+        // if (fighter.state !== Stances.DASH) fighter.setFlipX(LEFT > 0)
+        console.log('right')
+        fighter.anims.play('right', 24, false)
       } else if (buttons.B0) {
         fighter.anims.play('hop')
       } else {
@@ -431,7 +448,10 @@ export default class Arena extends Phaser.Scene {
               fighter.anims.stop('left', 24, false)
             }
             break
-          case '':
+          case 'right':
+            if (LEFT == 0 || RIGHT == 0) {
+              fighter.anims.stop('right', 24, false)
+            }
             break
           default:
             return
@@ -439,5 +459,13 @@ export default class Arena extends Phaser.Scene {
         fighter.update(player)
       }
     })
+  }
+  loadFont(name, url) {
+    var newFont = new FontFace(name, `url(${url})`);
+    newFont.load().then(function (loaded) {
+        document.fonts.add(loaded);
+    }).catch(function (error) {
+        return error;
+    });
   }
 }

@@ -24,7 +24,11 @@ export default class LandingScreen extends Phaser.Scene {
   {
     this.load.scenePlugin('mergedInput', MergedInput);
     this.load.image('button', './assets/select.png')
-    this.load.image('bg', './assets/basic_sky.png')
+    this.load.image('bg', './assets/start_screen.png')
+    this.load.image('sun', './assets/sun_screenshot.PNG')
+    this.load.image('dragon', './assets/dragon_screenshot.PNG')
+    this.load.image('eye', './assets/eye_screenshot.PNG')
+    this.loadFont('Ruslan', './assets/RuslanDisplay-Regular.ttf')
   }
   
   create()
@@ -77,19 +81,28 @@ export default class LandingScreen extends Phaser.Scene {
   {
     let playerNumber = this.mergedInput.players.length
     let sunMap = [[115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250]]
-      this.scene.start('Arena', 
-        { 
-          mapData: 'sun_map.json', 
-          tileData: "gridtiles.png", 
-          backgroundData:  "sun_background.png", 
-          numberOfPlayers: playerNumber, 
-          spawns: sunMap 
-        })
+          this.scene.start('Arena', 
+            { 
+              mapData: 'sun_map.json', 
+              tileData: "gridtiles.png", 
+              backgroundData:  "sun_background.png", 
+              numberOfPlayers: playerNumber, 
+              spawns: sunMap 
+            })
     }
     update()    
     {
         this.mergedInput.players.forEach((player, i) => {
-            this.add.text(200 * (i + 1), 100, `Hello player ${i + 1}`, { fontSize: 20, color: '#00ff00' })
+            this.add.text(200 * i + 200, 150, `Player ${i + 1} joined!`, { fontFamily: 'Ruslan', fontSize: 20, color: '#00ff00' })
+            .setShadow(2, 2, "#333333", 2, false, true);
         })
     }
+    loadFont(name, url) {
+        var newFont = new FontFace(name, `url(${url})`);
+        newFont.load().then(function (loaded) {
+            document.fonts.add(loaded);
+        }).catch(function (error) {
+            return error;
+        });
+      }
 } 
