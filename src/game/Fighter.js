@@ -92,19 +92,17 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
         Idle(this, { vx: dx * DEFAULT_SPEED });
       }
     }
-    const boat = {
-      id: 1,
-    };
-    // console.log(boat.id)
+    
     // All stance sprites face the direction
     // of the left thumbstick
     // this.updateHitbox()
-    this.setRotation(angle);
+    // this.setRotation(angle)
     // When you get to the arena edge,
     // wrap back around.
-    this.y = modulo(this.y, ARENA_HEIGHT);
-    this.x = modulo(this.x, ARENA_WIDTH);
-
+    if (this.state !== Stances.DASH) this.setFlipX(this.LEFT > 0)
+    this.y = modulo(this.y, ARENA_HEIGHT)
+    this.x = modulo(this.x, ARENA_WIDTH)
+    
     // move glow
     this.glow.setPosition(this.x, this.y);
   }
@@ -114,7 +112,6 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
       throw new Error(`Stance ${stanceName} must be a defined stance.`);
     }
     this.state = stanceName;
-    this.setTexture(stanceName);
   }
 
   // updateHitbox updates the fighter's
