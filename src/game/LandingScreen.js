@@ -49,13 +49,13 @@ export default class LandingScreen extends Phaser.Scene {
   startEyeMap()
   {
     let playerNumber = this.mergedInput.players.length
-    let eyeMap = [[100, 100]] // Waiting for map to be fixed to be able to set spawns
+    let eyeMap = [[100, 500], [1175, 550], [475, 600], [810, 600], [495, 450], [820, 450], [225, 150], [1070, 150], [480 ,50], [800, 50], [645, 50], [645, 500]] 
       this.scene.start('Arena', 
       {
         mapData: 'eye_background.json',
         tileData: "gridtiles.png", 
         backgroundData:  "eye_background.png", 
-        numberOfPlayers: playerNumber,
+        numberOfPlayers: 4,
         spawns:  eyeMap
       })
   }
@@ -69,7 +69,7 @@ export default class LandingScreen extends Phaser.Scene {
         tileData: "gridtiles.png", 
         backgroundData:  
         "dragon_background.png",
-        numberOfPlayers: playerNumber, 
+        numberOfPlayers: 4, 
         spawns:  drangonMap
       })
   }
@@ -82,7 +82,7 @@ export default class LandingScreen extends Phaser.Scene {
           mapData: 'sun_map.json', 
           tileData: "gridtiles.png", 
           backgroundData:  "sun_background.png", 
-          numberOfPlayers: playerNumber, 
+          numberOfPlayers: 4, 
           spawns: sunMap 
         })
     }
