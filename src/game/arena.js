@@ -37,6 +37,14 @@ export default class Arena extends Phaser.Scene {
     this.load.image(Stances.BALL, "assets/Ball.png")
     this.load.image('spark', 'assets/blue.png')
 
+    //sound set up
+    this.load.audio('battery', 'assets/battery.wav')
+    this.load.audio('lazer', 'assets/lazer.wav')
+    this.load.audio('blaster', 'assets/blaster.mp3')
+    this.load.audio('numkey', 'assets/numkey.wav')
+    this.load.audio('stop', 'assets/stop.wav')
+    this.load.audio('keys', 'assets/keys.wav')
+
     //Setup for loading the base tilemap and required tile images
     this.load.tilemapTiledJSON("tilemap", `assets/${this.mapData}`)
     this.load.image("base_tiles", `assets/${this.tileData}`)
@@ -214,48 +222,59 @@ export default class Arena extends Phaser.Scene {
         fighter1.state === Stances.DASH && 
         fighter2.state === Stances.IDLE
         ) {
+        fighter1.scene.sound.play('lazer', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       } else if (
         fighter1.state === Stances.DASH &&
         fighter2.state === Stances.BALL
       ) {
+        fighter1.scene.sound.play('lazer', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       } else if (
         fighter1.state === Stances.DASH &&
         fighter2.state === Stances.BLOCK
       ) {
+        fighter1.scene.sound.play('lazer', { volume: 0.8 })
         handleWin(fighter2, fighter1)
         // Ball > Block
       } else if (
         fighter1.state === Stances.BLOCK &&
         fighter2.state === Stances.BALL
       ) {
+        console.log(this)
+        fighter1.scene.sound.play('stop', { volume: 0.8 })
         handleWin(fighter2, fighter1)
       } else if (
         fighter1.state === Stances.BLOCK &&
         fighter2.state === Stances.DASH
       ) {
+        fighter1.scene.sound.play('stop', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       } else if (
         fighter1.state === Stances.BLOCK &&
         fighter2.state === Stances.IDLE
       ) {
+        fighter1.scene.sound.play('stop', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       } else if (
         fighter1.state === Stances.BALL &&
         fighter2.state === Stances.DASH
       ) {
+        fighter1.scene.sound.play('battery', { volume: 0.8 })
         handleWin(fighter2, fighter1)
       } else if (
         fighter1.state === Stances.BALL &&
         fighter2.state === Stances.BLOCK
-      ) {
+        ) {
+        fighter1.scene.sound.play('battery', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       } else if (
         // Ball > Idle
         fighter1.state === Stances.BALL &&
         fighter2.state === Stances.IDLE
-      ) {
+        ) {
+        console.log(this)
+        fighter1.scene.sound.play('battery', { volume: 0.8 })
         handleWin(fighter1, fighter2)
       }
 
