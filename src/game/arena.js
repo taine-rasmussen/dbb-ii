@@ -244,6 +244,8 @@ export default class Arena extends Phaser.Scene {
         }
       )
 
+      
+
       // Used for distinguishing different controller texts
       // while debugging
       function randomColor() {
@@ -265,5 +267,17 @@ export default class Arena extends Phaser.Scene {
       fighter.update(player)
       this.scoreTexts[i].setText(player.fighter.score)
     })
+    let scoreArr = []
+    this.players.forEach((player) => {
+        if (player.fighter.score === 11){
+          this.players.map((pl) => {
+            scoreArr.push({
+              id: pl.index + 1,
+              score: pl.fighter.score
+            })
+          })
+          this.scene.start('EndGameScreen', {scores: scoreArr})
+        }
+      })
   }
 }

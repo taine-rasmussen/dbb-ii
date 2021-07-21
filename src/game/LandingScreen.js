@@ -18,7 +18,7 @@ export default class LandingScreen extends Phaser.Scene {
     }
     create()
     {
-        const bg = this.add.image(0,0,'bg').setScale(2)
+        const bg = this.add.image(640, 360, 'bg')
         const sunButton = this.add.image(200, 600, 'button').setInteractive().setScale(0.5);
         const dragonButton = this.add.image(600, 600, 'button').setInteractive().setScale(0.5);
         const eyeButton = this.add.image(1000, 600, 'button').setInteractive().setScale(0.5);
@@ -47,7 +47,7 @@ export default class LandingScreen extends Phaser.Scene {
     update()    
     {
         this.mergedInput.players.forEach((player, i) => {
-            this.add.text(200 * i, 100, `Hello player ${i + 1}`, { fontSize: 20, color: '#00ff00' })
+            this.add.text(200 * i + 100, 100, `Player ${i + 1} joined!`, { fontSize: 20, color: '#00ff00' })
         })
     }
 } 
