@@ -147,24 +147,14 @@ export default class Arena extends Phaser.Scene {
     )
 
     let playerGroup = this.add.group()
-    this.starts = [
-      [280, 600],
-      [1000, 150],
-      [500, 300],
-      [400, 100],
-    ]
         
         // setup lighting + particles
     this.lights.enable()
     this.lights.active = true
     this.trails = []
     this.playerColors = [[255, 0, 0], [0, 255, 0], [0, 0, 255], [255, 255, 0]]
-    
-    // let sunMap = [[115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250]]
-
 
     let randomSpawn = [];
-    // let playerGroup = this.add.group();
     
     // Creates new array of random spawns based on amount of players in the game
     for (var i = 0; i < this.players.length; i++) {
@@ -172,7 +162,6 @@ export default class Arena extends Phaser.Scene {
           randomSpawn.push(this.spawns[n]);
           this.spawns.splice(n, 1);
       }
-      console.log('Array of random cords', randomSpawn)
 
     this.players.forEach((player, i) => {
       let [x, y] = randomSpawn[i]
