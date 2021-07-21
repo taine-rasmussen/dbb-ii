@@ -151,7 +151,10 @@ export default class Arena extends Phaser.Scene {
 
     function rockPaperScissors(fighter1, fighter2) {
       // Dash > Idle
-      if (fighter1.state === Stances.DASH && fighter2.state === Stances.IDLE) {
+      if (
+        fighter1.state === Stances.DASH && 
+        fighter2.state === Stances.IDLE
+        ) {
         handleWin(fighter1, fighter2)
       } else if (
         fighter1.state === Stances.DASH &&
@@ -198,8 +201,16 @@ export default class Arena extends Phaser.Scene {
       }
 
       function handleWin(winner, loser) {
+        // console.log(winner.score)
+        loser.setPosition(loser.spawn.x, loser.spawn.y);
+        loser.body.enable = false;
+        loser.setActive(false).setVisible(false);
         winner.score += 1
-        loser.setPosition(loser.spawn.x, loser.spawn.y)
+        setTimeout(() => {
+          loser.setActive(true).setVisible(true);
+          loser.body.enable = true;
+          return;
+        }, 1000)
       }
     }
 
