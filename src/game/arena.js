@@ -29,7 +29,6 @@ export default class Arena extends Phaser.Scene {
 
 
   preload() {
-<<<<<<< HEAD
     this.load.scenePlugin("mergedInput", MergedInput);
     this.load.multiatlas("gamepad", "assets/gamepad.json", "assets");
     this.load.image(Stances.IDLE, "assets/Player.png");
@@ -38,23 +37,6 @@ export default class Arena extends Phaser.Scene {
     this.load.image(Stances.BALL, "assets/Ball.png");
     this.load.image("spark", "assets/blue.png");
     this.loadFont('Ruslan', './assets/RuslanDisplay-Regular.ttf')
-||||||| d8ce69f
-    this.load.scenePlugin("mergedInput", MergedInput);
-    this.load.multiatlas("gamepad", "assets/gamepad.json", "assets");
-    this.load.image(Stances.IDLE, "assets/Player.png");
-    this.load.image(Stances.BLOCK, "assets/Block.png");
-    this.load.image(Stances.DASH, "assets/Dash.png");
-    this.load.image(Stances.BALL, "assets/Ball.png");
-    this.load.image("spark", "assets/blue.png");
-=======
-    this.load.scenePlugin("mergedInput", MergedInput)
-    this.load.multiatlas("gamepad", "assets/gamepad.json", "assets")
-    this.load.image(Stances.IDLE, "assets/BEAN.png")
-    this.load.image(Stances.BLOCK, "assets/Block.png")
-    this.load.image(Stances.DASH, "assets/Dash.png")
-    this.load.image(Stances.BALL, "assets/Ball.png")
-    this.load.image('spark', 'assets/blue.png')
->>>>>>> 83a8ff088542ded739537d93ac3816098b040ec1
 
     //sound set up
     this.load.audio('battery', 'assets/battery.wav')
