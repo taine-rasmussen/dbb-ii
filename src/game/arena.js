@@ -52,11 +52,11 @@ export default class Arena extends Phaser.Scene {
       frameWidth: 640,
       frameHeight: 640
     })
-    this.load.spritesheet('Leaf2Ball', 'assets/Leaf2Ball.png', {
-      frameWidth: 64,
-      frameHeight: 64
-    })
     this.load.spritesheet('right', 'assets/RunBeanRight.png', {
+      frameWidth: 640,
+      frameHeight: 630
+    })
+    this.load.spritesheet('Leaf2Ball', 'assets/Leaf2Ball.png', {
       frameWidth: 64,
       frameHeight: 64
     })
@@ -308,6 +308,12 @@ export default class Arena extends Phaser.Scene {
       repeat: -1
     })
     this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('right', { start: 0, end: 5 }),
+      frameRate: 12,
+      repeat: -1
+    })
+    this.anims.create({
       key: 'hop',
       frames: this.anims.generateFrameNumbers('hop'),
       frameRate: 15,
@@ -379,11 +385,18 @@ export default class Arena extends Phaser.Scene {
         if(fighter.anims.getName() !== 'Bean2Ball') {
           fighter.anims.play('Bean2Ball')
         }
-      } else if ((LEFT > 0 || RIGHT > 0) 
+      } else if ((LEFT > 0 && RIGHT === 0) 
         && fighter.state === Stances.IDLE 
         && fighter.body.velocity.y === 0) {
-          if (fighter.state !== Stances.DASH) fighter.setFlipX(LEFT > 0)
+          // if (fighter.state !== Stances.DASH) fighter.setFlipX(LEFT > 0)
+          console.log('left')
           fighter.anims.play('left', 24, false)
+      } else if ((LEFT === 0 && RIGHT > 0) 
+      && fighter.state === Stances.IDLE 
+      && fighter.body.velocity.y === 0) {
+        // if (fighter.state !== Stances.DASH) fighter.setFlipX(LEFT > 0)
+        console.log('right')
+        fighter.anims.play('right', 24, false)
       } else if (buttons.B0) {
         fighter.anims.play('hop')
       } else {
@@ -408,7 +421,10 @@ export default class Arena extends Phaser.Scene {
               fighter.anims.stop('left', 24, false)
             }
             break
-          case '':
+          case 'right':
+            if (LEFT == 0 || RIGHT == 0) {
+              fighter.anims.stop('right', 24, false)
+            }
             break
           default:
             return
