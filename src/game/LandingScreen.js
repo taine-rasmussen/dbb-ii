@@ -29,7 +29,6 @@ export default class LandingScreen extends Phaser.Scene {
   
   create()
   {
-    let map1Spawns = [[100, 100], [1000, 100], [650, 200], [300, 400], [1000, 400]]
     // const text = this.add.text(240, 300, "Press A/X to Play!", { fontFamily: "Arial Black", fontSize: 82 });
     // text.setStroke('#000000', 4);
     // //  Apply the gradient fill.
@@ -50,33 +49,42 @@ export default class LandingScreen extends Phaser.Scene {
   startEyeMap()
   {
     let playerNumber = this.mergedInput.players.length
-    this.scene.start('Arena', { mapData: 'eye_background.json', tileData: "gridtiles.png", backgroundData:  "eye_background.png", numberOfPlayers: playerNumber, spawns:  [[280, 600], [1000, 150], [500, 300], [400, 100],]})
+    let eyeMap = [[100, 100]] // Waiting for map to be fixed to be able to set spawns
+      this.scene.start('Arena', 
+      {
+        mapData: 'eye_background.json',
+        tileData: "gridtiles.png", 
+        backgroundData:  "eye_background.png", 
+        numberOfPlayers: playerNumber,
+        spawns:  eyeMap
+      })
   }
   startDragonMap()
   {
     let playerNumber = this.mergedInput.players.length
-    this.scene.start('Arena', 
-    { 
-      mapData: 'dragon_background.json', 
-      tileData: "gridtiles.png", 
-      backgroundData:  
-      "dragon_background.png",
-      numberOfPlayers: playerNumber, 
-      spawns:  [[280, 600], [1000, 150], [500, 300], [400, 100]]
-    })
+    let drangonMap = [[80, 100], [350, 50], [622, 100], [945, 25], [1250, 25], [1185, 400], [945, 550], [722, 325], [530, 375], [200, 550]]
+      this.scene.start('Arena', 
+      { 
+        mapData: 'dragon_background.json', 
+        tileData: "gridtiles.png", 
+        backgroundData:  
+        "dragon_background.png",
+        numberOfPlayers: playerNumber, 
+        spawns:  drangonMap
+      })
   }
   startSunMap()
   {
     let playerNumber = this.mergedInput.players.length
     let sunMap = [[115, 100], [495, 50], [293, 250], [602, 300], [470, 600], [90, 600], [800, 600], [1200, 600], [1100, 250]]
-          this.scene.start('Arena', 
-            { 
-              mapData: 'sun_map.json', 
-              tileData: "gridtiles.png", 
-              backgroundData:  "sun_background.png", 
-              numberOfPlayers: 4, 
-              spawns: sunMap 
-            })
+      this.scene.start('Arena', 
+        { 
+          mapData: 'sun_map.json', 
+          tileData: "gridtiles.png", 
+          backgroundData:  "sun_background.png", 
+          numberOfPlayers: playerNumber, 
+          spawns: sunMap 
+        })
     }
     update()    
     {
