@@ -29,7 +29,7 @@ export default class Arena extends Phaser.Scene {
 
 
   preload() {
-<<<<<<< HEAD
+
     this.load.scenePlugin("mergedInput", MergedInput);
     this.load.multiatlas("gamepad", "assets/gamepad.json", "assets");
     this.load.image(Stances.IDLE, "assets/Player.png");
@@ -38,23 +38,8 @@ export default class Arena extends Phaser.Scene {
     this.load.image(Stances.BALL, "assets/Ball.png");
     this.load.image("spark", "assets/blue.png");
     this.loadFont('Ruslan', './assets/RuslanDisplay-Regular.ttf')
-||||||| d8ce69f
-    this.load.scenePlugin("mergedInput", MergedInput);
-    this.load.multiatlas("gamepad", "assets/gamepad.json", "assets");
-    this.load.image(Stances.IDLE, "assets/Player.png");
-    this.load.image(Stances.BLOCK, "assets/Block.png");
-    this.load.image(Stances.DASH, "assets/Dash.png");
-    this.load.image(Stances.BALL, "assets/Ball.png");
-    this.load.image("spark", "assets/blue.png");
-=======
-    this.load.scenePlugin("mergedInput", MergedInput)
-    this.load.multiatlas("gamepad", "assets/gamepad.json", "assets")
-    this.load.image(Stances.IDLE, "assets/BEAN.png")
-    this.load.image(Stances.BLOCK, "assets/Block.png")
-    this.load.image(Stances.DASH, "assets/Dash.png")
-    this.load.image(Stances.BALL, "assets/Ball.png")
-    this.load.image('spark', 'assets/blue.png')
->>>>>>> 83a8ff088542ded739537d93ac3816098b040ec1
+    this.load.image("fullscreen", "assets/fullscreen.png")
+
 
     //sound set up
     this.load.audio('battery', 'assets/battery.wav')
@@ -130,6 +115,23 @@ export default class Arena extends Phaser.Scene {
     backgroundLayer.setScale(0.8)
     middleLayer.setScale(0.8)
         
+    //fullscreen
+    var button = this.add.image(1220, 30, 'fullscreen', 50).setOrigin(1, 0).setInteractive();
+    button.setScale(0.1)
+    button.on('pointerup', function () {
+        if (this.scale.isFullscreen)
+        {
+            button.setFrame(0);
+            this.scale.stopFullscreen();
+        }
+        else
+        {
+            button.setFrame(1);
+            this.scale.startFullscreen();
+        }
+    }, this);
+    //fullscreen
+
     //smooth out fps
     // this.physics.world.syncToRender = true
     this.physics.world.fixedStep = false
