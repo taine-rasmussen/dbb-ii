@@ -1,5 +1,9 @@
 # Bean Brawl
 
+Bean Brawl was built by myself and four others as our final project in the last week of our time during the Dev Acadmey Kōtare Cohort.
+
+# About Bean Brawl:
+
 Experience up to 4 player local multiplayer action, with gamepad (xbox & playstation) support. Bean Brawl is a 2d action fighting game with simple rock-paper-scissors-like mechanics. Each bean brawler can change their stance, affecting their movement. Gameplay rewards quick reaction times and fast, controlled player movement. 
 
 
